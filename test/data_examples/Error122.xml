@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<eveapi version="2">
+  <currentTime>2015-11-05 14:34:32</currentTime>
+  <error code="122">Invalid or missing list of names.</error>
+  <cachedUntil>2015-11-06 02:34:32</cachedUntil>
+</eveapi>
