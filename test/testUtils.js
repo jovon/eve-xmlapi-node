@@ -1,5 +1,5 @@
 'use strict';
-
+var config = require('./config')
 // NOTE: testUtils should be require'd before anything else in each spec file!
 
 require('mocha');
@@ -10,11 +10,17 @@ var utils = module.exports = {
 
   getUserEveKey: function() {
     var key = {
-			keyid: process.env.EVE_TEST_API_KEYID || '123456',
-			vcode: process.env.EVE_TEST_API_VCODE || 'tGN0bIwXnHdwOa85VABjPdSn8nWY7G7I',
+			keyID: process.env.EVE_TEST_API_KEYID || config.TEST_KEYID || '123456',
+			vCode: process.env.EVE_TEST_API_VCODE || config.TEST_VCODE || 'tGN0bIwXnHdwOa85VABjPdSn8nWY7G7I',
 		};
 
     return key;
+  },
+  
+  getParams: function () {
+    var params = this.getUserEveKey()
+    params['characterId'] = process.env.EVE_TEST_API_CHARID || '123'
+    return params
   },
 
   getSpyableEveApi: function() {

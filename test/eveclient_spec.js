@@ -1,21 +1,18 @@
 'use strict';
 
-var testUtils = require('./testUtils');
-var Promise = require('bluebird');
-var eve = require('../lib/eveclient')(
-  testUtils.getUserEveKey(),
-  'latest'
-);
+var testUtils = require('./testUtils'),
+    Promise = require('bluebird'),    
+    fs = require('fs'),
+    http = require('http'),
+    expect = require('chai').expect;
 
-var expect = require('chai').expect;
-
-describe('EveClient Module', function() {
-  var cleanup = new testUtils.CleanupUtility();
+describe('EveClient Module', function() {  
   this.timeout(20000);
 
   describe('ClientUserAgent', function() {
     it('Should return a user-agent serialized JSON object', function() {
       var d = Promise.defer();
+      var eve = require('../lib/EveClient')({'User-Agent': 'test'});
       eve.getClientUserAgent(function(c) {
         d.resolve(JSON.parse(c));
       });
@@ -24,6 +21,7 @@ describe('EveClient Module', function() {
   });
 
   describe('setTimeout', function() {
+    var eve = require('../lib/EveClient')();
     it('Should define a default equal to the node default', function() {
       expect(eve.getApiField('timeout')).to.equal(require('http').createServer().timeout);
     });
@@ -37,31 +35,66 @@ describe('EveClient Module', function() {
     });
   });
 
-  describe('Callback support', function() {
-    describe('Any given endpoint', function() {
-      it('Will call a callback if successful', function() {
-        var defer = Promise.defer();
+  describe('Callback support', function() {    
+      it('Will call a callback if successful', function(done) {
+        var eve = require('../lib/EveClient')();
+        var server = http.createServer()
+        eve.setHost('localhost', '1337', 'http')
         
-        eve.callList.fetch(function(err, queue){
-            defer.resolve('Called!');
-        });
-
-        return expect(defer.promise).to.eventually.equal('Called!');
+        fs.readFile(__dirname + '/data_examples/APICallList.xml', function (err, xml){
+          if(err) defer.reject(err)   
+          
+          server.on('request', function (request, response) {
+            fs.readFile(__dirname + '/data_examples/CharacterID.xml', function (err, xml){
+              if(err) console.log(err)      
+              if (request.url === '/Api/CallList.xml.aspx') {
+                response.write(xml)                
+              }
+              response.end()
+            }) 
+          })
+          
+          server.listen(1337)
+          
+          eve.callList.fetch(function(err, queue){ 
+            expect(err).to.not.exist
+            expect(queue).to.be.a('object')            
+            server.close(done)
+          });
+        })       
       });
+      
 
-      it('Given an error the callback will receive it', function() {
-        var defer = Promise.defer();
-
-        eve.skillQueue.fetch(function(err, queue) {          
-          if (err) {
-            defer.resolve('ErrorWasPassed');
-          } else {
-            defer.reject('NoErrorPassed');
-          }
-        });
-
-        return expect(defer.promise).to.eventually.become('ErrorWasPassed')
-      });
+      it('Given an error the callback will receive it', function(done) {
+        var server = http.createServer(),
+            eve = require('../lib/EveClient')();
+            
+        eve.setHost('localhost','1338', 'http') 
+        server.on('request', function (request, response) {      
+          fs.readFile(__dirname + '/data_examples/Error122.xml', function (err, error_xml){
+            if(err) console.log(err)
+            fs.readFile(__dirname + '/data_examples/CharacterID.xml', function (err, xml){
+              if(err) console.log(err)      
+              if (request.url != '/eve/CharacterID.xml.aspx?names=Edward%20deBristol') {
+                response.write(error_xml)
+              } else {
+                response.write(xml)
+              }
+              response.end()
+            })
+          })
+        })
+                      
+        
+        server.listen(1338)        
+        
+        eve.characterID.fetch({}, function(err, charIDs){
+          expect(err).to.exist
+          expect(err.type).to.equal('InvalidRequestError')          
+          server.close(done)
+        })  
+               
+      });     
     });
+    
   });
-});
