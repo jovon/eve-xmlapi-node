@@ -13,12 +13,13 @@
     "xml2js": "^0.4.15"
   },
   "devDependencies": {
-    "chai": "^3.4.0",
+    "chai": "*",
     "chai-as-promised": "^5.1.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "mock-fs": "^3.4.0"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha -u qunit --recursive"
+    "test": "mocha -u qunit --recursive"
   },
   "author": "Jovon Packard",
   "license": "ISC"

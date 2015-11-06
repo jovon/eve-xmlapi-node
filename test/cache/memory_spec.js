@@ -1,4 +1,4 @@
-var assert = require('assert')
+var assert = require('chai').assert
   , MemoryCache = require(__dirname + '/../../lib/cache/memory')
 
 describe('eveapi.cache.MemoryCache', function(){
@@ -12,12 +12,8 @@ describe('eveapi.cache.MemoryCache', function(){
         cache.read('herp', function (err, value) {
           assert.ifError(err)
           assert.equal(value, 'derp')
-    
-          cache.read('herp', function (err, value) {
-            assert.ifError(err)
-            assert.equal(value, 'derp')
-            done()
-          })
+          done()
+          
         })
       })
     })

@@ -1,4 +1,4 @@
-var assert = require('assert')
+var assert = require('chai').assert
   , fs = require('fs')
   , path = require('path')
   , FileCache = require(__dirname + '/../../lib/cache/file')
@@ -20,7 +20,7 @@ describe('eveapi.cache.FileCache', function(){
   
   describe('#makeDirs()', function(){
     it('recursively creates directories', function (done) {
-      var cache = new FileCache()
+      var cache = new FileCache({fs: fs})
         , dir = path.join(cache.getPath(), 'foo', 'bar', 'baz')
     
       fs.exists(dir, function (exists) {
@@ -39,29 +39,31 @@ describe('eveapi.cache.FileCache', function(){
   })
   
   describe('#read', function(){
+    var cache = new FileCache({prefix: 'test1-', path: '/tmp/testCache'})
+    var key = 'herp1234'
+    
+    
     it('retrieves value from cache', function (done) {
-      var cache = new FileCache({prefix: 'test1-'})
-    
-      cache.write('herp', 'derp', 15, function (err) {
-        assert.ifError(err)
-    
-        cache.read('herp', function (err, value) {
+      cache.write(key, 'derp', 15000, function (err, fileName) {            
+        cache.read(key, function (err, value, file) {
           assert.ifError(err)
+          assert.equal(file, fileName)
           assert.equal(value, 'derp')    
           
-          cache.clear(done)
-        })        
-      })
-    })
-    
-    it('passes undefined for expired entry', function (done) {
-      var cache = new FileCache({prefix: 'test2-'})
-        , duration = 5
-    
-      cache.write('herp', 'derp', duration, function (err) {
-        assert.ifError(err)
-    
-        cache.read('herp', function (err, value) {
+          cache.clear(done)        
+        })
+      })      
+    })    
+  })
+  
+  describe('#read other', function(){
+    var cache = new FileCache({prefix: 'test2-', path: '/tmp/testCache'})
+    var key = 'herp2345'
+        
+    it('passes undefined for expired entry', function (done) {      
+      var duration = 50000
+      cache.write(key, 'derp', duration, function (err, fileName) {      
+        cache.read(key, function (err, value) {
           assert.ifError(err)
           assert.equal(value, 'derp')
     
@@ -69,23 +71,22 @@ describe('eveapi.cache.FileCache', function(){
             return (new Date()).getTime() + duration
           }
     
-          cache.read('herp', function (err, value) {
+          cache.read(key, function (err, value) {
             assert.ifError(err)
-            assert.ok(typeof value === 'undefined')
-            
+            assert.isNull(value)
+            cache.clear(done)
           })
-          cache.clear(done)
+          
         })
-      })
-      
+      })      
     })
     
     it('does not error on ENOENT', function (done) {
-      var cache = new FileCache({prefix: 'test3-'})
+      cache.setPrefix('test3-')
     
-      cache.read('herp', function (err, value) {
+      cache.read(key, function (err, value) {
         assert.ifError(err)
-        assert.ok(typeof value === 'undefined')
+        assert.isNull(value)
         cache.clear(done)
       })
       

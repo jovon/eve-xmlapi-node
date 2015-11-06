@@ -35,7 +35,7 @@ describe('EveClient Module', function() {
     });
   });
 
-  describe('Callback support', function() {    
+  describe('Callback support', function() {      
       it('Will call a callback if successful', function(done) {
         var eve = require('../lib/EveClient')();
         var server = http.createServer()
@@ -45,20 +45,19 @@ describe('EveClient Module', function() {
           if(err) defer.reject(err)   
           
           server.on('request', function (request, response) {
-            fs.readFile(__dirname + '/data_examples/CharacterID.xml', function (err, xml){
-              if(err) console.log(err)      
-              if (request.url === '/Api/CallList.xml.aspx') {
-                response.write(xml)                
-              }
-              response.end()
-            }) 
+            if(err) console.log(err)      
+            if (request.url === '/Api/CallList.xml.aspx') {
+              response.write(xml)                
+            }
+            response.end()            
           })
           
           server.listen(1337)
           
-          eve.callList.fetch(function(err, queue){ 
+          eve.callList.fetch(function(err, list){ 
+            expect(list.eveapi.result[0].rowset[0].row[0].$.groupID).to.equal('1')
             expect(err).to.not.exist
-            expect(queue).to.be.a('object')            
+            expect(list).to.be.a('object')            
             server.close(done)
           });
         })       
