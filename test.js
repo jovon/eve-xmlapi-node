@@ -1,5 +1,5 @@
-var eve = require('./lib/EveClient')()
+var eve = require('./lib/eveclient')('', 'latest')
 
-eve.serverStatus.fetch(function(err, data){
+eve.callList.fetch(function(err, data){
 	console.log(data)	
 })
