@@ -35,65 +35,105 @@ describe('EveClient Module', function() {
     });
   });
 
-  describe('Callback support', function() {      
-      it('Will call a callback if successful', function(done) {
-        var eve = require('../lib/EveClient')();
-        var server = http.createServer()
-        eve.setHost('localhost', '1337', 'http')
-        
+  describe('API CallList', function() {
+      var callList_xml;
+      before(function(done){        
         fs.readFile(__dirname + '/data_examples/APICallList.xml', function (err, xml){
-          if(err) defer.reject(err)   
+          if(err) console.log("read calllist xml: ", err)
+          callList_xml = xml
+          done()
+        })
+      })
+            
+      it('#fetch returns CallList', function(done) {
+          var eve = require('../lib/EveClient')();        
+          eve.setCache('file');
+          var server = http.createServer()
+          eve.setHost('localhost', '1337', 'http')           
           
-          server.on('request', function (request, response) {
-            if(err) console.log(err)      
+          server.on('request', function (request, response) {            
             if (request.url === '/Api/CallList.xml.aspx') {
-              response.write(xml)                
+              response.write(callList_xml)                
             }
-            response.end()            
+            response.end()
           })
           
           server.listen(1337)
           
-          eve.callList.fetch(function(err, list){ 
+          eve.callList.fetch(function(err, list){
+            if(err) console.log("Calllist fetch: ", err) 
             expect(list.eveapi.result[0].rowset[0].row[0].$.groupID).to.equal('1')
-            expect(err).to.not.exist
-            expect(list).to.be.a('object')            
+            expect(err).to.be.a('null')                     
             server.close(done)
           });
-        })       
-      });
-      
-
-      it('Given an error the callback will receive it', function(done) {
+        
+      });  
+    });
+    
+    describe('CharacterID', function(){      
+      var error122_xml, charID_xml
+      before(function(done){
+        fs.readFile(__dirname + '/data_examples/Error122.xml', function (err, xml){
+            if(err) console.log("Server Error reading Error122.xml: ", err)
+            error122_xml = xml
+        })
+        fs.readFile(__dirname + '/data_examples/CharacterID.xml', function (err, xml){
+              if(err) console.log("Server Error reading CharacterID.xml: ", err)
+              charID_xml = xml
+              done()
+        })
+      })
+      it('#fetch a characterID', function(done){
+        var server = http.createServer(), eve = require('../lib/EveClient')();
+        server.on('request', function (request, response) {      
+            if (request.url != '/eve/CharacterID.xml.aspx?names=CCP%20Garthagk') {
+              response.write(error122_xml)
+            } else {
+              response.write(charID_xml)
+            }
+            response.end()
+        })          
+         
+        server.listen(1337)
+            
+        eve.setHost('localhost','1337', 'http')
+        eve.characterID.fetch('CCP Garthagk', function(err, charIDs){
+          if(err) console.log("charID err fetch: ", err)
+          expect(err).to.be.a('null')          
+          expect(charIDs.eveapi.result[0].rowset[0].row[0].$.characterID).to.equal('797400947')          
+          expect(charIDs.eveapi.result[0].rowset[0].row[0].$.name).to.equal('CCP Garthagk')          
+          server.close(done)
+        })
+      })
+      it('#fetch Given an error the callback will receive it', function(done) {
         var server = http.createServer(),
             eve = require('../lib/EveClient')();
             
-        eve.setHost('localhost','1338', 'http') 
+        eve.setHost('localhost','1337', 'http') 
         server.on('request', function (request, response) {      
-          fs.readFile(__dirname + '/data_examples/Error122.xml', function (err, error_xml){
-            if(err) console.log(err)
+          fs.readFile(__dirname + '/data_examples/Error122.xml', function (err, xml){
+            if(err) console.log("Server Error reading Error122.xml: ", err)
             fs.readFile(__dirname + '/data_examples/CharacterID.xml', function (err, xml){
-              if(err) console.log(err)      
+              if(err) console.log("Server Error reading CharacterID.xml: ", err)
+                                
               if (request.url != '/eve/CharacterID.xml.aspx?names=Edward%20deBristol') {
-                response.write(error_xml)
+                response.write(error122_xml)
               } else {
-                response.write(xml)
+                response.write(charID_xml)
               }
               response.end()
             })
           })
         })
-                      
+         
+        server.listen(1337)        
         
-        server.listen(1338)        
-        
-        eve.characterID.fetch({}, function(err, charIDs){
-          expect(err).to.exist
-          expect(err.type).to.equal('InvalidRequestError')          
-          server.close(done)
-        })  
-               
-      });     
-    });
-    
+        eve.characterID.fetch({}, function(err, charIDs){          
+          expect(err.type).to.equal('EveInvalidRequestError')
+          server.close(done)          
+        })
+                       
+      });
+            
+    })
   });
