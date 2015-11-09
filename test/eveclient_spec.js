@@ -83,6 +83,8 @@ describe('EveClient Module', function() {
               done()
         })
       })
+      
+      
       it('#fetch a characterID', function(done){
         var server = http.createServer(), eve = require('../lib/EveClient')();
         server.on('request', function (request, response) {      
@@ -110,20 +112,13 @@ describe('EveClient Module', function() {
             eve = require('../lib/EveClient')();
             
         eve.setHost('localhost','1337', 'http') 
-        server.on('request', function (request, response) {      
-          fs.readFile(__dirname + '/data_examples/Error122.xml', function (err, xml){
-            if(err) console.log("Server Error reading Error122.xml: ", err)
-            fs.readFile(__dirname + '/data_examples/CharacterID.xml', function (err, xml){
-              if(err) console.log("Server Error reading CharacterID.xml: ", err)
-                                
-              if (request.url != '/eve/CharacterID.xml.aspx?names=Edward%20deBristol') {
-                response.write(error122_xml)
-              } else {
-                response.write(charID_xml)
-              }
-              response.end()
-            })
-          })
+        server.on('request', function (request, response) {
+            if (request.url != '/eve/CharacterID.xml.aspx?names=Edward%20deBristol') {
+              response.write(error122_xml)
+            } else {
+              response.write(charID_xml)
+            }
+            response.end()            
         })
          
         server.listen(1337)        
@@ -131,9 +126,7 @@ describe('EveClient Module', function() {
         eve.characterID.fetch({}, function(err, charIDs){          
           expect(err.type).to.equal('EveInvalidRequestError')
           server.close(done)          
-        })
-                       
-      });
-            
+        })                       
+      });            
     })
   });
