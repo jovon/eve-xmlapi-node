@@ -99,21 +99,9 @@ describe('EveClient Module', function() {
         server.listen(1337)
             
         eve.setHost('localhost','1337', 'http')
-        eve.characterID.fetch({names: ['CCP Garthagk']}, function(err, charIDs){
-          if(err) console.log("charID err fetch: ", err)
-          expect(err).to.be.a('null')          
-          expect(charIDs.eveapi.result[0].rowset[0].row[0].$.characterID).to.equal('797400947')          
-          expect(charIDs.eveapi.result[0].rowset[0].row[0].$.name).to.equal('CCP Garthagk')         
-        })
-        eve.characterID.fetch({names: 'CCP Garthagk'}, function(err, charIDs){
-          if(err) console.log("charID err fetch: ", err)
-          expect(err).to.be.a('null')          
-          expect(charIDs.eveapi.result[0].rowset[0].row[0].$.characterID).to.equal('797400947')          
-          expect(charIDs.eveapi.result[0].rowset[0].row[0].$.name).to.equal('CCP Garthagk')         
-        })
         eve.characterID.fetch('CCP Garthagk', function(err, charIDs){
           if(err) console.log("charID err fetch: ", err)
-          expect(err).to.be.a('null')
+          expect(err).to.be.a('null')          
           expect(charIDs.eveapi.result[0].rowset[0].row[0].$.characterID).to.equal('797400947')          
           expect(charIDs.eveapi.result[0].rowset[0].row[0].$.name).to.equal('CCP Garthagk')          
           server.close(done)
