@@ -10,6 +10,7 @@
     "bluebird": "^3.0.5",
     "lodash": "^3.10.1",
     "qs": "^6.0.0",
+    "redis": "^2.3.0",
     "xml2js": "^0.4.15"
   },
   "devDependencies": {
