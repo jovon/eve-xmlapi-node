@@ -2,9 +2,14 @@
   "name": "spaceship-life",
   "version": "1.0.0",
   "description": "library for accessing Eve Online's API",
+  "private": true,
   "main": "index.js",
   "directories": {
     "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jovon/spaceship-life.git"
   },
   "dependencies": {
     "bluebird": "^3.0.5",
@@ -16,8 +21,7 @@
   "devDependencies": {
     "chai": "*",
     "chai-as-promised": "^5.1.0",
-    "mocha": "^2.3.3",
-    "mock-fs": "^3.4.0"
+    "mocha": "^2.3.3"
   },
   "scripts": {
     "test": "mocha -u qunit --recursive"
