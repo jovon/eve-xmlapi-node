@@ -1,9 +1,10 @@
   var assert = require('chai').assert
     , RedisCache = require(__dirname + '/../../lib/cache/redis')
+    , client = require("fakeredis").createClient()
 
 describe('eveapi.cache.RedisCache', function(){
   describe('#read', function(){
-    var cache = new RedisCache({no_ready_check: true})
+    var cache = new RedisCache({client: client})
     var key = 'key'
     var value = {'test': 'value'}    
     before(function(done){
@@ -23,7 +24,7 @@ describe('eveapi.cache.RedisCache', function(){
   })
   
   describe('#read expired', function(){
-    var cache = new RedisCache({no_ready_check: true})
+    var cache = new RedisCache({client: client})
     var key = 'key'
     var value = {'test': 'value'}
     var duration = 5000    
