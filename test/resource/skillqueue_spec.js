@@ -2,7 +2,6 @@
 
 var testUtils = require('../testUtils'),
     eve = testUtils.getSpyableEveApi(),
-    Promise = require('bluebird'),    
     expect = require('chai').expect,
     testKey = testUtils.getUserEveKey();
     
