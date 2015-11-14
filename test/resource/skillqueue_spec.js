@@ -4,12 +4,11 @@ var testUtils = require('../testUtils'),
     eve = testUtils.getSpyableEveApi(),
     Promise = require('bluebird'),    
     expect = require('chai').expect,
-    key = testUtils.getUserEveKey(),
     testKey = testUtils.getUserEveKey();
     
 describe('#fetch', function() {          
     it('Sends the correct request with ID param', function(done) {               
-        eve.skillQueue.fetch(key)
+        eve.skillQueue.fetch(testKey)
         expect(eve.LAST_REQUEST).to.deep.equal({
             method: 'GET',
             url: '/char/SkillQueue.xml.aspx',
