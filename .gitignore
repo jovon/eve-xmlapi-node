@@ -6,3 +6,4 @@ node_modules
 test/config.js
 test.js
 dump.rdb
+.vscode

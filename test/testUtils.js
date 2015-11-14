@@ -12,6 +12,7 @@ var utils = module.exports = {
     var key = {
 			keyID: process.env.EVE_TEST_API_KEYID || config.TEST_KEYID || '123456',
 			vCode: process.env.EVE_TEST_API_VCODE || config.TEST_VCODE || 'tGN0bIwXnHdwOa85VABjPdSn8nWY7G7I',
+      characterID: config.TEST_CHARID,
 		};
 
     return key;
@@ -33,20 +34,18 @@ var utils = module.exports = {
     EveInstance.REQUESTS = [];
 
     for (var i in EveInstance) {
-      if (EveInstance[i] instanceof eve.eveResource) {
+      if (EveInstance[i] instanceof eve.EveResource) {
         // Override each _request method so we can make the params
         // available to consuming tests (revealing requests made on
         // REQUESTS and LAST_REQUEST):
-        EveInstance[i]._request = function(method, url, data, auth, options, cb) {
+        EveInstance[i]._request = function(method, url, data, options, cb) {
           var req = EveInstance.LAST_REQUEST = {
             method: method,
             url: url,
-            data: data,
+            data: data || '',
             headers: options.headers || {},
           };
-          if (auth) {
-            req.auth = auth;
-          }
+                    
           EveInstance.REQUESTS.push(req);
           cb.call(this, null, {});
         };
