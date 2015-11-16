@@ -12,7 +12,7 @@ describe('EveClient Module', function() {
   describe('ClientUserAgent', function() {
     it('Should return a user-agent serialized JSON object', function() {
       var d = Promise.defer();
-      var eve = require('../lib/EveClient')({'User-Agent': 'test'});
+      var eve = require('../lib/EveClient')//({'User-Agent': 'test'});
       eve.getClientUserAgent(function(c) {
         d.resolve(JSON.parse(c));
       });
@@ -21,7 +21,7 @@ describe('EveClient Module', function() {
   });
 
   describe('setTimeout', function() {
-    var eve = require('../lib/EveClient')();
+    var eve = require('../lib/EveClient')//();
     it('Should define a default equal to the node default', function() {
       expect(eve.getApiField('timeout')).to.equal(require('http').createServer().timeout);
     });

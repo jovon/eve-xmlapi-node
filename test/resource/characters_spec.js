@@ -3,22 +3,22 @@
 var testUtils = require('../testUtils'),
     eve = testUtils.getSpyableEveApi(),
     expect = require('chai').expect,
-    testKey = testUtils.getParams();
+    testKey = testUtils.getUserEveKey();
     
-describe('Skill Queue', function() {          
+describe('Characters', function() {          
     it('#fetch Sends the correct request with param object', function(done) {               
-        eve.skillQueue.fetch(testKey)
+        eve.characters.fetch(testKey)
         expect(eve.LAST_REQUEST).to.deep.equal({
             method: 'GET',
-            url: '/char/SkillQueue.xml.aspx',
-            data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode + "&characterID="+testKey.characterID,
+            url: '/account/Characters.xml.aspx',
+            data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
             headers: {},
         });
         done() 
     });
     
     it('#fetch returns an Error', function(done){
-        eve.skillQueue.fetch({}, function(err, charIDs){          
+        eve.characters.fetch({}, function(err, charIDs){          
           expect(err.type).to.equal('EveInvalidRequestError')
           done()
         }) 

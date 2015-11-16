@@ -12,7 +12,7 @@ var utils = module.exports = {
     var key = {
 			keyID: process.env.EVE_TEST_API_KEYID || config.TEST_KEYID || '123456',
 			vCode: process.env.EVE_TEST_API_VCODE || config.TEST_VCODE || 'tGN0bIwXnHdwOa85VABjPdSn8nWY7G7I',
-      characterID: config.TEST_CHARID,
+      
 		};
 
     return key;
@@ -20,7 +20,7 @@ var utils = module.exports = {
   
   getParams: function () {
     var params = this.getUserEveKey()
-    params['characterId'] = process.env.EVE_TEST_API_CHARID || '123'
+    params['characterID'] = process.env.EVE_TEST_API_CHARID || config.TEST_CHARID || '123'
     return params
   },
 
@@ -28,13 +28,13 @@ var utils = module.exports = {
     // Provide a testable eve instance
     // That is, with mock-requests built in and hookable
 
-    var eve = require('../lib/EveClient');
-    var EveInstance = eve('fakeAuthToken');
+    var EveInstance = require('../lib/EveClient');
+    // var EveInstance = eve('fakeAuthToken');
 
     EveInstance.REQUESTS = [];
-
+    
     for (var i in EveInstance) {
-      if (EveInstance[i] instanceof eve.EveResource) {
+      if (EveInstance[i] instanceof EveInstance.EveResource) {
         // Override each _request method so we can make the params
         // available to consuming tests (revealing requests made on
         // REQUESTS and LAST_REQUEST):
