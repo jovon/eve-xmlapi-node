@@ -29,8 +29,7 @@ var utils = module.exports = {
     // That is, with mock-requests built in and hookable
 
     var EveInstance = require('../lib/EveClient');
-    // var EveInstance = eve('fakeAuthToken');
-
+    
     EveInstance.REQUESTS = [];
     
     for (var i in EveInstance) {

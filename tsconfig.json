@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "out": "./output/tsc.js",
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "declaration": true
+    },
+    "exclude": [
+        "node_modules",
+        "test",
+		".git"
+    ]
+}
