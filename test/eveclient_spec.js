@@ -36,5 +36,16 @@ describe('EveClient Module', function() {
       expect(eve.getApiField('timeout')).to.equal(require('http').createServer().timeout);
     });
   });
+  
+  describe('setApiKey', function(){
+    var eve = require('../lib/EveClient')
+    eve.setApiKey({})
+    it('Should set the key', function(){
+      var key = testUtils.getUserEveKey()
+      eve.setApiKey(key)
+      expect(eve.getApiKey()).to.deep.equal(key)
+    })
+  }) 
+  
     
 });

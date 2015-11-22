@@ -1,3 +1,5 @@
+/// <reference path="../typings/app/app.d.ts"/>
+
 import utils = require('./utils')
 
 var exec = require('child_process').exec,
@@ -36,6 +38,7 @@ interface Client {
 interface Resouces {
   [key: string]: any
 }
+
 
 function EveClient(args?: any): any {
   var version = ''
@@ -125,21 +128,18 @@ function EveClient(args?: any): any {
     return self._cache
   };
   
-  // @param  {Object}   key   Eve Apikey with vcode and keyid properties
+  // @param  {Object}   key   Eve Apikey with vCode and keyID properties
   this.setApiKey= function(key: any) {
-    if (key && key != {}) {
-      if (key.keyid && key.vcode) {
-        self._setApiField('keyID', key.keyid);
-     
-        self._setApiField('vCode', key.vcode);
-      }
+    if (key) {      
+        self._setApiField('keyID', key.keyID || key.keyid);     
+        self._setApiField('vCode', key.vCode || key.vcode);      
     }
   };
   
-  this.getApiKey= function(args: any) {
-    var keyid = self.getApiField('keyid') || args.keyID || args.keyid,
-        vcode = self.getApiField('vcode') || args.vCode || args.vcode
-        
+  this.getApiKey= function(args: any): EveKey {
+    var keyid = self.getApiField('keyID') || args.keyID || args.keyid,
+        vcode = self.getApiField('vCode') || args.vCode || args.vcode
+    
     if(keyid && keyid != '' && vcode && vcode != '') {
       return {keyID: keyid, vCode: vcode}
     }

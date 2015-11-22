@@ -18,6 +18,7 @@ describe('Characters', function() {
     });
     
     it('#fetch returns an Error', function(done){
+        eve.setApiKey({})        
         eve.characters.fetch({}, function(err, charIDs){          
           expect(err.type).to.equal('EveInvalidRequestError')
           done()

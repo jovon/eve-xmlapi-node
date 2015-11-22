@@ -53,7 +53,7 @@ var utils = module.exports = {
   /**
    * Return the options hash from a list of arguments
    */
-  getKeyFromArgs: function(args: any) {
+  getKeyFromArgs: function(args: any): EveKey{
     var key: EveKey = {
       keyID: '',
       vCode: '',

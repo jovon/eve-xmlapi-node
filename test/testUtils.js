@@ -53,4 +53,53 @@ var utils = module.exports = {
 
     return EveInstance;
   },
+  /**
+   * A utility where cleanup functions can be registered to be called post-spec.
+   * CleanupUtility will automatically register on the mocha afterEach hook,
+   * ensuring its called after each descendent-describe block.
+   */
+  CleanupUtility: (function() {
+    CleanupUtility.DEFAULT_TIMEOUT = 20000;
+
+    function CleanupUtility(timeout) {
+      var self = this;
+      this._cleanupFns = [];
+      this._eve = require('../lib/EveClient')
+      
+      afterEach(function(done) {
+        this.timeout(timeout || CleanupUtility.DEFAULT_TIMEOUT);
+        return self.doCleanup(done);
+      });
+    }
+
+    CleanupUtility.prototype = {
+
+      doCleanup: function(done) {
+        var cleanups = this._cleanupFns;
+        var total = cleanups.length;
+        var completed = 0;
+        for (var fn; fn = cleanups.shift();) {
+          var promise = fn.call(this);
+          if (!promise || !promise.then) {
+            throw new Error('CleanupUtility expects cleanup functions to return promises!');
+          }
+          promise.then(function() {
+            // cleanup successful
+            ++completed;
+            if (completed === total) {
+              done();
+            }
+          }, function(err) {
+            // not successful
+            throw err;
+          });
+        }
+        if (total === 0) {
+          done();
+        }
+      }      
+    };
+
+    return CleanupUtility;
+  }()),
 };

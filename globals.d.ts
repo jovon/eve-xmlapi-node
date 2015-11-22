@@ -24,7 +24,7 @@ interface Headers {
   'X-Client-User-Agent': string;
 }
  
- export interface Api {
+ interface Api {
 	auth?: string;
 	host: string;
 	basePath: string;
