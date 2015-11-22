@@ -22,6 +22,7 @@ interface Headers {
   'User-Agent': string;
   'EveApi-Version': string;
   'X-Client-User-Agent': string;
+  [key: string]: any
 }
  
  interface Api {
