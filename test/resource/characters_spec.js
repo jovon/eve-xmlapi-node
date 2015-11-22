@@ -7,14 +7,15 @@ var testUtils = require('../testUtils'),
     
 describe('Characters', function() {          
     it('#fetch Sends the correct request with param object', function(done) {               
-        eve.characters.fetch(testKey)
-        expect(eve.LAST_REQUEST).to.deep.equal({
-            method: 'GET',
-            url: '/account/Characters.xml.aspx',
-            data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
-            headers: {},
-        });
-        done() 
+        eve.characters.fetch(testKey, function(err, data){
+            expect(eve.LAST_REQUEST).to.deep.equal({
+                method: 'GET',
+                url: '/account/Characters.xml.aspx',
+                data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
+                headers: {},
+            });
+            done()
+        }) 
     });
     
     it('#fetch returns an Error', function(done){

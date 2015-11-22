@@ -9,20 +9,28 @@ eve.transformAllResponses = function(resp){
 	if(resp.eveapi.result) results.result = resp.eveapi.result[0]
 	return results
 }
-eve.serverStatus.transformResponseData = function(resp){
-	resp.result.serverOpen = resp.result.serverOpen[0]
-	resp.result.onlinePlayers = resp.result.onlinePlayers[0]	
-	return resp
-}
+// eve.serverStatus.transformResponseData = function(resp){
+// 	resp.result.serverOpen = resp.result.serverOpen[0]
+// 	resp.result.onlinePlayers = resp.result.onlinePlayers[0]	
+// 	return resp
+// }
 
-eve.serverStatus.fetch(function(err, data){
+// eve.serverStatus.fetch(function(err, data){
+// 	if(err) console.log("test err", err)
+// 	if(data) console.log("test data", data)
+// 	return data
+// })
+
+// eve.characters.fetch(key, function(err, data) {
+// 	if(err) console.log("test err", err)
+// 	if(data) console.log("test data", data.result.rowset[0].row)
+// 	return data	
+// })
+
+var handler = function handler(err, data) {
 	if(err) console.log("test err", err)
 	if(data) console.log("test data", data)
-	return data
-})
-
-eve.characters.fetch(key, function(err, data) {
-	if(err) console.log("test err", err)
-	if(data) console.log("test data", data.result.rowset[0].row)
 	return data	
-})
+}
+
+eve.characterID.fetch('Biae', handler)
