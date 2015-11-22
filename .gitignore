@@ -7,3 +7,8 @@ test/config.js
 test.js
 dump.rdb
 .vscode
+*.js.map
+*.js
+typings
+output
+.vscode

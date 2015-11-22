@@ -1,5 +1,4 @@
-'use strict';
-var utils = require('./utils')
+import utils = require('./utils')
 
 var exec = require('child_process').exec,
     DEFAULT_HOST = 'api.testeveonline.com',
