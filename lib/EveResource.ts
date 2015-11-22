@@ -5,8 +5,8 @@ import Promise = require('bluebird');
 import _ = require('lodash');
 var parseString = require('xml2js').parseString;
 
-var utils = require('./utils');
-var Error = require('./Error');
+var utils = require('./utils'),
+    Error = require('./Error');
 
 var hasOwn = {}.hasOwnProperty;
 
@@ -106,9 +106,9 @@ EveResource.prototype = {
             if (result && result.eveapi && result.eveapi.error) {              
               var errorMessage = result.eveapi.error[0]._
               var errorCode = result.eveapi.error[0].$.code
+                            
+              err = new Error.EveAuthenticationError({message: errorMessage, code: errorCode})
               
-              err.message = errorMessage
-              err.code = errorCode
               callback.call(self, err, null);
             } else {                            
               callback.call(self, null, result);
