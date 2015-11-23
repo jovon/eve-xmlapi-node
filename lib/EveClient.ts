@@ -28,8 +28,9 @@ var api: Api = {
     dev: true,
   };
 
-interface Client {
+interface EveClient {
   _api: Api;
+  new (args?: any): void;
   [key: string]: any;
 }
 
@@ -38,7 +39,7 @@ interface Resources {
 }
 
 
-function EveClient(args?: any): any {
+function EveClient(args?: any): void {
   var version = ''
       , cache = ''
       , self = this;

@@ -1,9 +1,9 @@
-var assert = require('chai').assert
-  , MemoryCache = require(__dirname + '/../../lib/cache/memory')
+var assert = require('chai').assert,
+    MemoryCache = require(__dirname + '/../../lib/cache/memory')
 
 describe('eveapi.cache.MemoryCache', function(){
   describe('#read() ', function(){
-    it('retrieves value from cache', function (done) {
+    it.only('retrieves value from cache', function (done) {
       var cache = new MemoryCache()
     
       cache.write('herp', 'derp', 5, function (err) {
