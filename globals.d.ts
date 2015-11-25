@@ -1,6 +1,6 @@
 import http = require('http')
 
-interface Options {
+export interface Options {
         protocol?: string;
         host?: string;
         hostname?: string;
@@ -15,7 +15,7 @@ interface Options {
         agent?: http.Agent;
     }
 
-interface Headers {
+export interface Headers {
   'Accept': string;
   'Content-Type': string;
   'Content-Length': number;
@@ -25,7 +25,7 @@ interface Headers {
   [key: string]: any
 }
  
- interface Api {
+export interface Api {
 	auth?: string;
 	host: string;
 	basePath: string;
@@ -38,7 +38,7 @@ interface Headers {
   [key: string]: any;
  }
  
- interface ClientUserAgent {
+export interface ClientUserAgent {
 	client_version: string,
 	lang: string,
 	lang_version: string,
@@ -47,7 +47,7 @@ interface Headers {
 	uname?: string,
  }
  
- interface Spec {
+export interface Spec {
    method: string;
    path: string;
    cacheDuration: number;
@@ -55,13 +55,9 @@ interface Headers {
    requestParamProcessor?: (self: any, method: string, params: any, cb: Function)=>any;
  }
  
-interface EveKey {
+export interface EveKey {
   keyID: string;
   vCode: string;
   characterID?: string;
 }
  
-interface Cache {
-  write(key: string, value: string, duration: number, cb: Function): string;
-  read(key: string, cb: Function): string;
-}

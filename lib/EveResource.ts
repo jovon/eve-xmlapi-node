@@ -3,12 +3,18 @@ import https = require('https');
 import path = require('path');
 import Promise = require('bluebird');
 import _ = require('lodash');
+import globals = require('../globals')
 var parseString = require('xml2js').parseString;
 
 var utils = require('./utils'),
     Error = require('./Error');
 
 var hasOwn = {}.hasOwnProperty;
+
+interface EveResource {
+  extend: Function;
+  method: Function;
+}
 
 // Provide extension mechanism for Eve Resource Sub-Classes
 EveResource.extend = utils.protoExtend;
@@ -118,7 +124,7 @@ EveResource.prototype = {
               self,
               new Error.EveAPIError({
                 message: 'Invalid XML received from the Eve API',
-                response: result,
+                response: response,
                 exception: e,
                 requestId: headers['request-id'],
               }),
@@ -151,29 +157,21 @@ EveResource.prototype = {
   },
 
   _request: function(method: string, path: string, params: string, options: any, callback: Function) {
-    var self = this;    
-       
-    var apiVersion = this._eve.getApiField('version');    
-    
-    var headers: Headers = {      
-      'Accept': 'application/xml',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': options.contentLength,
-      'User-Agent': 'EveAPI-node/' + this._eve.getConstant('PACKAGE_VERSION'),
-    };
-    
-    if (apiVersion) {
-      headers['EveApi-Version'] = apiVersion;
-    }
-
+    var self = this,
+        headers: globals.Headers;
     // Grab client-user-agent before making the request:
     this._eve.getClientUserAgent(function(cua: string) {
-      headers['X-Client-User-Agent'] = cua;
-
-      if (options.headers) {
-        headers = _.extend(headers, options.headers);
-      }
-
+      var apiVersion = this._eve.getApiField('version') || '';    
+    
+      headers = {      
+        'Accept': 'application/xml',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': options.contentLength,
+        'User-Agent': 'EveAPI-node/' + this._eve.getConstant('PACKAGE_VERSION'),
+        'EveApi-Version': apiVersion,
+        'X-Client-User-Agent': cua
+      };
+      
       makeRequest();
     });
 

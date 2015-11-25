@@ -4,11 +4,6 @@ export = Cache
  * @exports Cache as eveonline.cache.Cache
  * @constructor
  */
-// export interface iCache {
-//   getCurrentTime(): number;
-//   write(key: string, value: string, duration: number, cb: Function): void;
-//   read(key: string, cb: Function): void;
-// }
 
 class Cache {
   write: (key: string, value: string, duration: number, cb: Function)=>void;

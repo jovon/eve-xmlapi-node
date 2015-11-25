@@ -29,7 +29,7 @@ var utils = module.exports = {
     // That is, with mock-requests built in and hookable
 
     var EveInstance = require('../lib/EveClient')();
-    
+    EveInstance.setHost('api.testeveonline.com')
     EveInstance.REQUESTS = [];
     
     for (var i in EveInstance) {

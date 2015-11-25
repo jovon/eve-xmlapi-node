@@ -1,8 +1,11 @@
 
 import _ = require('lodash');
 import path = require('path');
+import globals = require('../globals')
+
 var utils = require('./utils');
 var Error = require('./Error')
+
 
 /**
  * Create an API method from the declared spec.
@@ -15,7 +18,7 @@ var Error = require('./Error')
  *  optionally passed through a hash (Object) as the penultimate argument
  *  (preceeding the also-optional callback argument
  */
-function eveMethod(spec: Spec) {
+function eveMethod(spec: globals.Spec) {
   var commandPath = spec.path,
       requestMethod = (spec.method || 'GET').toUpperCase(),
       duration = spec.cacheDuration || 3600000,  // sets default duration at 1 hour
@@ -41,11 +44,10 @@ function eveMethod(spec: Spec) {
       requestParams = utils.formatRequestParams(self, 
                                                 requestMethod, 
                                                 args[0], 
-                                                spec.headers, 
                                                 deferred);
     }
                                                 
-    options = {headers: spec.headers, contentLength: contentLength(keyString)};                                                 
+    options = {contentLength: contentLength(keyString)};                                                 
     requestPath = this.createFullPath(commandPath, requestParams)
     
     cacheKey = (this.overrideHost || this._eve.getApiField('host')) + requestPath
@@ -79,13 +81,13 @@ function eveMethod(spec: Spec) {
   };
 };
 
-function contentLength(requestParams: string) {
-  return requestParams ? requestParams.length : 0
+function contentLength(keyStr: string) {
+  return keyStr ? keyStr.length : 0
 }
 
 function verifyKeyObj(self: any, arg: any, deferred: any) {  
     var params = {}
-    var eveApiKeyObj: EveKey = self._eve.getApiKey(arg) 
+    var eveApiKeyObj: globals.EveKey = self._eve.getApiKey(arg) 
     if(utils.isKeyHash(eveApiKeyObj)) {
       if(utils.isObject(arg)) _.assign(params, eveApiKeyObj, arg)
     } else {

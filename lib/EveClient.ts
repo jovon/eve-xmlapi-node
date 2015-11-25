@@ -1,7 +1,8 @@
 import utils = require('./utils')
+import globals = require('../globals')
 
 var exec = require('child_process').exec,
-    DEFAULT_HOST = 'api.testeveonline.com',
+    DEFAULT_HOST = 'api.eveonline.com',
     DEFAULT_BASE_PATH = '',
     DEFAULT_API_VERSION = '2',
     DEFAULT_PORT = '443',
@@ -16,7 +17,8 @@ var resources: Resources = {
   Characters: require('./resources/Characters')
 }
 
-var api: Api = {
+
+var api: globals.Api = {
     auth: null,
     host: DEFAULT_HOST,
     basePath: DEFAULT_BASE_PATH,
@@ -29,7 +31,7 @@ var api: Api = {
   };
 
 interface EveClient {
-  _api: Api;
+  _api: globals.Api;
   new (args?: any): void;
   [key: string]: any;
 }
@@ -142,7 +144,7 @@ EveClient.prototype = {
     }
   },
   
-  getApiKey: function getApiKey(args: any): EveKey {
+  getApiKey: function getApiKey(args: any): globals.EveKey {
     var keyid = this.getApiField('keyID') || args.keyID || args.keyid,
         vcode = this.getApiField('vCode') || args.vCode || args.vcode
     

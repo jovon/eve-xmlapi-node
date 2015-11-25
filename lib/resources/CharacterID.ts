@@ -10,7 +10,7 @@ module.exports = EveResource.extend({
 		path: '/eve/CharacterID.xml.aspx',
 		cacheDuration: 360000		
 	}),
-	requestParamProcessor: function(method: string, params: any, headers: any) {
+	requestParamProcessor: function(method: string, params: any) {
 		if(params && params.names && typeof params === 'object') {
 			if(Array.isArray(params.names)) {
 				return utils.stringifyRequestData({names: params.names.join(',')})

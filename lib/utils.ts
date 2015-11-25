@@ -1,12 +1,13 @@
 import qs = require('qs');
 import _ = require('lodash');
+import globals = require('../globals')
 
 var hasOwn = {}.hasOwnProperty;
 var toString = {}.toString;
 
 var utils = module.exports = {
 
-  isKeyHash: function(o: EveKey) {
+  isKeyHash: function(o: globals.EveKey) {
     return _.isPlainObject(o) && o.hasOwnProperty('keyID') && o.hasOwnProperty('vCode')
   },
 
@@ -14,10 +15,10 @@ var utils = module.exports = {
     return _.isPlainObject(o);
   },
   
-  formatRequestParams(self: any, method: string, data: any, headers: any, deferred: any) {
+  formatRequestParams(self: any, method: string, data: any, deferred: any) {
     var requestParams: any;    
     if (self.requestParamProcessor) {
-      requestParams = self.requestParamProcessor(method, data, headers);      
+      requestParams = self.requestParamProcessor(method, data);      
       if(requestParams instanceof Error) {
         return deferred.reject(requestParams)
       }      
@@ -53,8 +54,8 @@ var utils = module.exports = {
   /**
    * Return the options hash from a list of arguments
    */
-  getKeyFromArgs: function(args: any): EveKey{
-    var key: EveKey = {
+  getKeyFromArgs: function(args: any): globals.EveKey{
+    var key: globals.EveKey = {
       keyID: '',
       vCode: '',
     }

@@ -3,7 +3,7 @@ var assert = require('chai').assert,
 
 describe('eveapi.cache.MemoryCache', function(){
   describe('#read() ', function(){
-    it.only('retrieves value from cache', function (done) {
+    it('retrieves value from cache', function (done) {
       var cache = new MemoryCache()
     
       cache.write('herp', 'derp', 5, function (err) {
