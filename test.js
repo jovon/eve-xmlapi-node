@@ -28,6 +28,7 @@ var handler = function handler(err, data) {
 	return data	
 }
 eve.setHost('api.testeveonline.com')
+
 eve.serverStatus.fetch(handler)
 // eve.characterID.fetch('Biae', handler)
 
