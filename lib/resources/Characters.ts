@@ -13,4 +13,4 @@ class Characters extends Resource {
 	}
 	
 }
-export = Chara
+export = Characters

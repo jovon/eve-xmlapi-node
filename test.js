@@ -1,5 +1,5 @@
 var eve = require('./lib/EveClient')()
-
+eve.setCache('file');
 var key = require('./test/testUtils').getUserEveKey()
 
 eve.transformAllResponses = function(resp){
@@ -16,11 +16,7 @@ eve.serverStatus.transformResponseData = function(resp){
 	return resp
 }
 
-// eve.characters.fetch(key, function(err, data) {
-// 	if(err) console.log("test err", err)
-// 	if(data) console.log("test data", data.result.rowset[0].row)
-// 	return data	
-// })
+
 
 var handler = function handler(err, data) {
 	if(err) console.log("test err", err)
@@ -31,4 +27,5 @@ eve.setHost('api.testeveonline.com')
 
 eve.serverStatus.fetch(handler)
 // eve.characterID.fetch('Biae', handler)
+// eve.characters.fetch(key, handler)
 
