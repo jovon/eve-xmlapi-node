@@ -18,14 +18,14 @@ eve.serverStatus.transformResponseData = function(resp){
 
 
 
-var handler = function handler(err, data) {
+var cb = function handler(err, data) {
 	if(err) console.log("test err", err)
 	if(data) console.log("test data", data)
-	return data	
+	return
 }
 eve.setHost('api.testeveonline.com')
 
-eve.serverStatus.fetch(handler)
-// eve.characterID.fetch('Biae', handler)
-// eve.characters.fetch(key, handler)
+eve.serverStatus.fetch(cb)
+eve.characterID.fetch('Biae', cb)
+eve.characters.fetch(key, cb)
 

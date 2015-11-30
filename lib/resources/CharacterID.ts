@@ -1,6 +1,5 @@
-
 import Resource = require('../EveResource');
-var Error = require('../Error.js')
+import Error = require('../Error')
 var utils = require('../utils')
 
 class CharacterID extends Resource {
@@ -22,7 +21,7 @@ class CharacterID extends Resource {
 			} else if (typeof params === 'string' && params != '') {
 				return utils.stringifyRequestData({names: params})
 			} else {
-				return new Error.EveInvalidRequestError("CharacterID requires an object with a names property or a string with the names separated by a comma.")
+				return new Error.EveInvalidRequestError({message: "CharacterID requires an object with a names property or a string with the names separated by a comma."})
 			}
 		};
 	};

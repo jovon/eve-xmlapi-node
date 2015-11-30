@@ -47,9 +47,10 @@ describe('CharacterID', function(){
             })
         })
         it('Given an error the callback will receive it', function(done) {               
-            eve.characterID.fetch({}, function(err, charIDs){          
+            eve.characterID.fetch({}, function(err, charIDs){      
+                console.log(err)    
                 expect(err.type).to.equal('EveInvalidRequestError')
-                done()        
+                done()
             })                       
         });
     })            
