@@ -11,18 +11,21 @@ var testUtils = require('./testUtils'),
 describe('EveClient Module', function() {  
   this.timeout(20000);
 
-  describe('ClientUserAgent', function() {
+  describe('UserAgent', function() {
     it('Should return a user-agent serialized JSON object', function() {
-      var eve = require('../lib/EveClient')({'User-Agent': {lang:'node'}})      
-      eve.getClientUserAgent(function(c) {
-        expect(c).to.have.property('lang', 'node');
+      var eve = require('../lib/EveClient')
+      
+      var ua = {'User-Agent': {lang:'node'}}
+      eve.setUserAgent(ua)      
+      eve.getUserAgent(function(c) {
+        expect(JSON.parse(c)).to.deep.equal(ua);
       });
       
     });
   });
 
   describe('setTimeout', function() {
-    var eve = require('../lib/EveClient')()
+    var eve = require('../lib/EveClient')
     
     it('Should define a default equal to the node default', function() {
       expect(eve.getApiField('timeout')).to.equal(require('http').createServer().timeout);
@@ -38,7 +41,7 @@ describe('EveClient Module', function() {
   });
   
   describe('setApiKey', function(){
-    var eve = require('../lib/EveClient')()
+    var eve = require('../lib/EveClient')
     eve.setApiKey({})
     it('Should set the key', function(){
       var key = testUtils.getUserEveKey()
@@ -48,7 +51,7 @@ describe('EveClient Module', function() {
   })
   
   describe('cache getter/setter', function(){
-    var eve = require('../lib/EveClient')()
+    var eve = require('../lib/EveClient')
     it('Should default to MemoryCache', function(){
       expect(eve.getCache()).to.be.an.instanceof(MemoryCache)
     })
@@ -61,7 +64,7 @@ describe('EveClient Module', function() {
   })
   
   describe('get/set host', function(){
-    var eve = require('../lib/EveClient')()
+    var eve = require('../lib/EveClient')
     it('Should set host', function(){
       var host = 'api.com'
       eve.setHost(host)

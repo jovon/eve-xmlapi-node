@@ -22,173 +22,161 @@ interface Resources {
   [key: string]: any
 }
 
-
 class EveClient implements globals.Client{
-  USER_AGENT_SERIALIZED: any;
-  _api: globals.Api;
-  EveResource: any;
-  cache: any;
-  _cache: any;
+    _api: globals.Api;
+    EveResource: any;
+    cache: any;
+    private _cache: any;
+    
+    PACKAGE_VERSION: any;
+    private USER_AGENT: any;
+    [key: string]: any;
+    constructor() {        
+      if (!(this instanceof EveClient)) {
+        return new EveClient();
+      }
+      
+      this._api = {
+        auth: null,
+        host: DEFAULT_HOST,
+        basePath: DEFAULT_BASE_PATH,
+        version: '',
+        timeout: DEFAULT_TIMEOUT,
+        port: DEFAULT_PORT,
+        protocol: DEFAULT_PROTOCOL,
+        agent: null,
+        dev: true,
+      };  
+      
+      this.EveResource = require('./EveResource')  
+      
+      this.cache = {}  
+      this.cache.Cache = require('./cache/cache')
+      this.cache.MemoryCache = require('./cache/memory')
+      this.cache.FileCache = require('./cache/file')
+      this.cache.RedisCache = require('./cache/redis')
+      this._cache = new this.cache.MemoryCache()    
+          
+      var version: string;        
+      
+      var packageJson = require('../package.json')
+      this.PACKAGE_VERSION = packageJson.version;
+      
+      this.USER_AGENT = null
+      
+      this._prepResources()
+    }  
+    
   
-  PACKAGE_VERSION: any;
-  USER_AGENT: any;
-  [key: string]: any;
-  constructor(args?: any) {        
-    if (!(this instanceof EveClient)) {
-      return new EveClient(args);
-    }
-    
-    this._api = {
-      auth: null,
-      host: DEFAULT_HOST,
-      basePath: DEFAULT_BASE_PATH,
-      version: '',
-      timeout: DEFAULT_TIMEOUT,
-      port: DEFAULT_PORT,
-      protocol: DEFAULT_PROTOCOL,
-      agent: null,
-      dev: true,
-    };  
-    
-    this.EveResource = require('./EveResource')  
-    
-    this.cache = {}  
-    this.cache.Cache = require('./cache/cache')
-    this.cache.MemoryCache = require('./cache/memory')
-    this.cache.FileCache = require('./cache/file')
-    this.cache.RedisCache = require('./cache/redis')
-    this._cache = new this.cache.MemoryCache()    
-        
-    var version: string;
-    if(args) {
-      version = args['version'] || DEFAULT_API_VERSION
-      this.USER_AGENT_SERIALIZED = args['User-Agent'] || null
-      if(args['cache']) this.setCache(args['cache'])
-    }    
-    
-    var packageJson = require('../package.json')
-    this.PACKAGE_VERSION = packageJson.version;
-    
-    this.USER_AGENT = {
-      client_version: this.PACKAGE_VERSION,
-      lang: 'node',
-      lang_version: process.version,
-      platform: process.platform,
-      publisher: 'jvnpackard@gmail.com',
-      uname: null,
+    setHost(host: string, port?: string, protocol?: string) {
+      this._setApiField('host', host);
+      if (port) {
+        this.setPort(port);
+      }
+      if (protocol) {
+        this.setProtocol(protocol);
+      }
     };
     
-    this._prepResources()
-  }  
+    setPort(port: string) {
+      this._setApiField('port', port.toLowerCase());
+    };
   
-
-  setHost(host: string, port?: string, protocol?: string) {
-    this._setApiField('host', host);
-    if (port) {
-      this.setPort(port);
-    }
-    if (protocol) {
-      this.setProtocol(protocol);
-    }
-  };
+    setProtocol(protocol: string) {
+      this._setApiField('protocol', protocol.toLowerCase());
+    };
   
-  setPort(port: string) {
-    this._setApiField('port', port.toLowerCase());
-  };
-
-  setProtocol(protocol: string) {
-    this._setApiField('protocol', protocol.toLowerCase());
-  };
-
-  setApiVersion(version: string) {
-    if (version) {
-      this._setApiField('version', version);
-    }
-  };
-  
-  setCache(cacheType: string, options?: any) {
-    if(cacheType) {
-      switch (cacheType.toLowerCase()) {
-        case 'file':
-          this._cache = new this.cache.FileCache(options)
-          break;
-        case 'redis':
-          this._cache = new this.cache.RedisCache(options)
-          break;
-        default:
-          this._cache = new this.cache.MemoryCache()        
+    setApiVersion(version: string) {
+      if (version) {
+        this._setApiField('version', version);
       }
-    }
-  };
-  
-  getCache() {
-    return this._cache
-  };
-  
-  // @param  {Object}   key   Eve Apikey with vCode and keyID properties
-  setApiKey(key: any) {
-    if (key) {      
-        this._setApiField('keyID', key.keyID || key.keyid);     
-        this._setApiField('vCode', key.vCode || key.vcode);      
-    }
-  };
-  
-  getApiKey(args: any): globals.EveKey {
-    var keyid = this.getApiField('keyID') || args.keyID || args.keyid,
-        vcode = this.getApiField('vCode') || args.vCode || args.vcode
+    };
     
-    if(keyid && keyid != '' && vcode && vcode != '') {
-      return {keyID: keyid, vCode: vcode}
-    }
-    return null
-  };
-
-  setTimeout(timeout: number) {
-    var self = this
-    this._setApiField(
-      'timeout',
-      timeout == null ? DEFAULT_TIMEOUT : timeout
-    );
-  };
-
-  setHttpAgent(agent: any) {
-    this._setApiField('agent', agent);
-  };
-
-  _setApiField(key: string, value: any) {
-    this._api[key] = value;
-  };
-
-  getApiField(key: string) {
-    return this._api[key];
-  };
+    setCache(cacheType: string, options?: any) {
+      if(cacheType) {
+        switch (cacheType.toLowerCase()) {
+          case 'file':
+            this._cache = new this.cache.FileCache(options)
+            break;
+          case 'redis':
+            this._cache = new this.cache.RedisCache(options)
+            break;
+          default:
+            this._cache = new this.cache.MemoryCache()        
+        }
+      } else {
+        throw Error('Missing cache type string')
+      }
+    };
+    
+    getCache() {
+      return this._cache
+    };
+    
+    // @param  {Object}   key   Eve Apikey with vCode and keyID properties
+    setApiKey(key: any) {
+      if (key) {      
+          this._setApiField('keyID', key.keyID || key.keyid);     
+          this._setApiField('vCode', key.vCode || key.vcode);      
+      }
+    };
+    
+    getApiKey(args: any): globals.EveKey {
+      var keyid = this.getApiField('keyID') || args.keyID || args.keyid,
+          vcode = this.getApiField('vCode') || args.vCode || args.vcode
+      
+      if(keyid && keyid != '' && vcode && vcode != '') {
+        return {keyID: keyid, vCode: vcode}
+      }
+      return null
+    };
   
-  getClientUserAgent(cb: Function) {    
-    if (this.USER_AGENT_SERIALIZED) {
-      return cb(this.USER_AGENT_SERIALIZED);
-    }
-    var self = this;
-    exec('uname -a', function(err: Error, uname: string) {
-      self.USER_AGENT.uname = uname || 'UNKNOWN';
-      self.USER_AGENT_SERIALIZED = JSON.stringify(self.USER_AGENT);
-      cb(self.USER_AGENT_SERIALIZED);
-    });
-  };
+    setTimeout(timeout: number) {
+      var self = this
+      this._setApiField(
+        'timeout',
+        timeout == null ? DEFAULT_TIMEOUT : timeout
+      );
+    };
   
-  setClientUserAgent(cua: string) {
-    this.USER_AGENT = cua;
+    setHttpAgent(agent: any) {
+      this._setApiField('agent', agent);
+    };
+  
+    _setApiField(key: string, value: any) {
+      this._api[key] = value;
+    };
+  
+    getApiField(key: string) {
+      return this._api[key];
+    };
+    
+    getUserAgent(cb: (cua: string)=>void) {
+      var self = this;
+      if(this.USER_AGENT) {
+        return cb(JSON.stringify(self.USER_AGENT))
+      }
+      // If the UserAgent isn't set then grab some info on the local system. 
+      exec('uname -a', function(err: Error, uname: string) {
+        self.USER_AGENT = uname || 'UNKNOWN';
+        cb(JSON.stringify(self.USER_AGENT));
+      });
+    };
+    
+    setUserAgent(ua: any) {
+      this.USER_AGENT = ua;
+    };
+  
+    /*  
+    * Make the first letter of the resource lowercase for the method
+    */
+    _prepResources() {
+      for (var name in resources) {
+        var resourceMethod: string = name[0].toLowerCase() + name.substring(1)  // (i.e. change ServerStatus to serverStatus)
+        this[resourceMethod] = new resources[name](this);                       // make the resource a method on EveClient
+      }
+    };
+  
   };
 
-  /*  
-   * Make the first letter of the resource lowercase for the method
-   */
-  _prepResources() {
-    for (var name in resources) {
-      var resourceMethod: string = name[0].toLowerCase() + name.substring(1)  // (i.e. change ServerStatus to serverStatus)
-      this[resourceMethod] = new resources[name](this);                       // make the resource a method on EveClient
-    }
-  };
-
-};
-
-export = EveClient;
+module.exports = new EveClient();

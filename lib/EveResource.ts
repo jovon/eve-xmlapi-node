@@ -155,16 +155,16 @@ class EveResource {
     var self = this,
         headers: globals.Headers;
     // Grab client-user-agent before making the request:
-    this._eve.getClientUserAgent(function(cua: string) {
+    this._eve.getUserAgent(function(cua: string) {
       var apiVersion = self._eve.getApiField('version') || '';    
     
       headers = {      
         'Accept': 'application/xml',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': options.contentLength,
-        'User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION,
-        'EveApi-Version': apiVersion,
-        'X-Client-User-Agent': cua
+        'User-Agent': cua,
+        'Client-Version': apiVersion,
+        'X-Client-User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION + ' (jvnpackard@gmail.com)'
       };
       
       makeRequest();
