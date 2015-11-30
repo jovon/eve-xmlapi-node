@@ -12,3 +12,4 @@ dump.rdb
 typings
 output
 .vscode
+.tscache
