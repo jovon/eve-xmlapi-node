@@ -2,8 +2,7 @@ import utils = require('./utils')
 import globals = require('../globals')
 import Promise = require('bluebird')
 
-var exec = require('child_process').exec,
-    DEFAULT_HOST = 'api.eveonline.com',
+var DEFAULT_HOST = 'api.eveonline.com',
     DEFAULT_BASE_PATH = '',
     DEFAULT_API_VERSION = '2',
     DEFAULT_PORT = '443',
@@ -154,13 +153,14 @@ class EveClient implements globals.Client{
       this.USER_AGENT = ua;
     };
   
-    /*  
-    * Make the first letter of the resource lowercase for the method
-    */
+    
     _prepResources() {
       for (var name in resources) {
-        var resourceMethod: string = name[0].toLowerCase() + name.substring(1)  // (i.e. change ServerStatus to serverStatus)
-        this[resourceMethod] = new resources[name](this);           // make the resource a method on EveClient
+        // change to camelcase (i.e. change ServerStatus to serverStatus)
+        var resourceMethod: string = name[0].toLowerCase() + name.substring(1)
+        // make the resource a method on EveClient 
+        this[resourceMethod] = new resources[name](this);
+        // add Promise method
         this[resourceMethod].fetchP = Promise.promisify(this[resourceMethod].fetch)
       }
     };
