@@ -18,71 +18,82 @@ var resources: Resources = {
 }
 
 
+var api: globals.Api = {
+    auth: null,
+    host: DEFAULT_HOST,
+    basePath: DEFAULT_BASE_PATH,
+    version: '',
+    timeout: DEFAULT_TIMEOUT,
+    port: DEFAULT_PORT,
+    protocol: DEFAULT_PROTOCOL,
+    agent: null,
+    dev: true,
+  };
+
+interface EveClient {
+  _api: globals.Api;
+  new (args?: any): void;
+  [key: string]: any;
+}
+
 interface Resources {
   [key: string]: any
 }
 
 
-class EveClient implements globals.Client{
-  USER_AGENT_SERIALIZED: any;
-  _api: globals.Api;
-  EveResource: any;
-  cache: any;
-  _cache: any;
+function EveClient(args?: any): void {
+  var version = ''
+      , cache = ''
+      , self = this;
+          
+  if (!(this instanceof EveClient)) {
+    return new EveClient(args);
+  }
+    
+  this.USER_AGENT_SERIALIZED = null;
   
-  PACKAGE_VERSION: any;
-  USER_AGENT: any;
-  [key: string]: any;
-  constructor(args?: any) {        
-    if (!(this instanceof EveClient)) {
-      return new EveClient(args);
-    }
-    
-    this._api = {
-      auth: null,
-      host: DEFAULT_HOST,
-      basePath: DEFAULT_BASE_PATH,
-      version: '',
-      timeout: DEFAULT_TIMEOUT,
-      port: DEFAULT_PORT,
-      protocol: DEFAULT_PROTOCOL,
-      agent: null,
-      dev: true,
-    };  
-    
-    this.EveResource = require('./EveResource')  
-    
-    this.cache = {}  
-    this.cache.Cache = require('./cache/cache')
-    this.cache.MemoryCache = require('./cache/memory')
-    this.cache.FileCache = require('./cache/file')
-    this.cache.RedisCache = require('./cache/redis')
-    this._cache = new this.cache.MemoryCache()    
-        
-    var version: string;
-    if(args) {
-      version = args['version'] || DEFAULT_API_VERSION
-      this.USER_AGENT_SERIALIZED = args['User-Agent'] || null
-      if(args['cache']) this.setCache(args['cache'])
-    }    
-    
-    var packageJson = require('../package.json')
-    this.PACKAGE_VERSION = packageJson.version;
-    
-    this.USER_AGENT = {
-      client_version: this.PACKAGE_VERSION,
-      lang: 'node',
-      lang_version: process.version,
-      platform: process.platform,
-      publisher: 'jvnpackard@gmail.com',
-      uname: null,
-    };
-    
-    this._prepResources()
-  }  
+  this._api = api;  
   
-
-  setHost(host: string, port?: string, protocol?: string) {
+  this.EveResource = require('./EveResource')  
+  
+  this.cache = {}  
+  this.cache.Cache = require('./cache/cache')
+  this.cache.MemoryCache = require('./cache/memory')
+  this.cache.FileCache = require('./cache/file')
+  this.cache.RedisCache = require('./cache/redis')
+  this._cache = new this.cache.MemoryCache()
+  
+  this.DEFAULT_HOST = DEFAULT_HOST;
+  this.DEFAULT_BASE_PATH = DEFAULT_BASE_PATH;
+  this.DEFAULT_API_VERSION = DEFAULT_API_VERSION;
+  this.DEFAULT_PORT = DEFAULT_PORT;
+  this.DEFAULT_PROTOCOL = DEFAULT_PROTOCOL;
+  
+  if(args) {
+    version = args['version'] || this.DEFAULT_API_VERSION
+    this.USER_AGENT_SERIALIZED = args['User-Agent'] || null
+    if(args['cache']) this.setCache(args['cache'])
+  }
+  
+  this.DEFAULT_TIMEOUT = require('http').createServer().timeout;
+  
+  var packageJson = require('../package.json')
+  this.PACKAGE_VERSION = packageJson.version;
+  
+  this.USER_AGENT = {
+    client_version: self.PACKAGE_VERSION,
+    lang: 'node',
+    lang_version: process.version,
+    platform: process.platform,
+    publisher: 'jvnpackard@gmail.com',
+    uname: null,
+  };
+  
+  this._prepResources()
+}  
+  
+EveClient.prototype = {
+  setHost: function setHost(host: string, port?: string, protocol?: string) {
     this._setApiField('host', host);
     if (port) {
       this.setPort(port);
@@ -90,23 +101,23 @@ class EveClient implements globals.Client{
     if (protocol) {
       this.setProtocol(protocol);
     }
-  };
+  },
   
-  setPort(port: string) {
+  setPort: function setPort(port: string) {
     this._setApiField('port', port.toLowerCase());
-  };
+  },
 
-  setProtocol(protocol: string) {
+  setProtocol: function setProtocol(protocol: string) {
     this._setApiField('protocol', protocol.toLowerCase());
-  };
+  },
 
-  setApiVersion(version: string) {
+  setApiVersion: function setApiVersion(version: string) {
     if (version) {
       this._setApiField('version', version);
     }
-  };
+  },
   
-  setCache(cacheType: string, options?: any) {
+  setCache: function setCache(cacheType: string, options: any) {
     if(cacheType) {
       switch (cacheType.toLowerCase()) {
         case 'file':
@@ -119,21 +130,21 @@ class EveClient implements globals.Client{
           this._cache = new this.cache.MemoryCache()        
       }
     }
-  };
+  },
   
-  getCache() {
+  getCache: function getCache() {
     return this._cache
-  };
+  },
   
   // @param  {Object}   key   Eve Apikey with vCode and keyID properties
-  setApiKey(key: any) {
+  setApiKey: function setApiKey(key: any) {
     if (key) {      
         this._setApiField('keyID', key.keyID || key.keyid);     
         this._setApiField('vCode', key.vCode || key.vcode);      
     }
-  };
+  },
   
-  getApiKey(args: any): globals.EveKey {
+  getApiKey: function getApiKey(args: any): globals.EveKey {
     var keyid = this.getApiField('keyID') || args.keyID || args.keyid,
         vcode = this.getApiField('vCode') || args.vCode || args.vcode
     
@@ -141,29 +152,33 @@ class EveClient implements globals.Client{
       return {keyID: keyid, vCode: vcode}
     }
     return null
-  };
+  },
 
-  setTimeout(timeout: number) {
+  setTimeout: function setTimeout(timeout: number) {
     var self = this
     this._setApiField(
       'timeout',
-      timeout == null ? DEFAULT_TIMEOUT : timeout
+      timeout == null ? self.DEFAULT_TIMEOUT : timeout
     );
-  };
+  },
 
-  setHttpAgent(agent: any) {
+  setHttpAgent: function setHttpAgent(agent: any) {
     this._setApiField('agent', agent);
-  };
+  },
 
-  _setApiField(key: string, value: any) {
+  _setApiField: function _setApiField(key: string, value: string) {
     this._api[key] = value;
-  };
+  },
 
-  getApiField(key: string) {
+  getApiField: function getApiField(key: string) {
     return this._api[key];
-  };
-  
-  getClientUserAgent(cb: Function) {    
+  },
+
+  getConstant: function getConstant(c: string) {
+    return this[c];
+  },
+
+  getClientUserAgent: function getClientUserAgent(cb: Function) {    
     if (this.USER_AGENT_SERIALIZED) {
       return cb(this.USER_AGENT_SERIALIZED);
     }
@@ -173,22 +188,24 @@ class EveClient implements globals.Client{
       self.USER_AGENT_SERIALIZED = JSON.stringify(self.USER_AGENT);
       cb(self.USER_AGENT_SERIALIZED);
     });
-  };
+  },
   
-  setClientUserAgent(cua: string) {
+  setClientUserAgent: function setClientUserAgent(cua: string) {
     this.USER_AGENT = cua;
-  };
+  },
 
   /*  
    * Make the first letter of the resource lowercase for the method
    */
-  _prepResources() {
+  _prepResources: function _prepResources() {
+    var self = this    
     for (var name in resources) {
-      var resourceMethod: string = name[0].toLowerCase() + name.substring(1)
-      this[resourceMethod] = new resources[name](this);
+      self[
+        name[0].toLowerCase() + name.substring(1)
+      ] = new resources[name](self);
     }
-  };
+  },
 
 };
 
-export = EveClient;
+module.exports = EveClient;

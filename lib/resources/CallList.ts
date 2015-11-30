@@ -1,14 +1,9 @@
-import Resource = require('../EveResource');
+import EveResource = require('../EveResource');
+var eveMethod = EveResource.method;
 
-class CallList extends Resource {
-	public fetch: ((err: Error, data: any)=>void);
-	constructor(eve: any) {
-		super(eve)
-		this.fetch = this.method({
-			method: 'GET',
-			path: '/Api/CallList.xml.aspx',
-		})
-	}
-}
-
-export = CallList
+module.exports = EveResource.extend({
+	fetch: eveMethod({
+		method: 'GET',
+		path: '/Api/CallList.xml.aspx',
+	}),
+})

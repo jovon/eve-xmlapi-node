@@ -59,7 +59,13 @@ describe('EveClient Module', function() {
       cache.clear(done)
     })
   })
-  
+  describe('getConstant', function(){
+    var eve = require('../lib/EveClient')()
+    it('Should return package version', function(){
+      
+      expect(eve.getConstant('PACKAGE_VERSION')).to.eql('1.0.0')
+    })
+  })
   describe('get/set host', function(){
     var eve = require('../lib/EveClient')()
     it('Should set host', function(){

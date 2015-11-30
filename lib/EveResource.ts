@@ -11,46 +11,51 @@ var utils = require('./utils'),
 
 var hasOwn = {}.hasOwnProperty;
 
+interface EveResource {
+  extend: Function;
+  method: Function;
+}
+
+// Provide extension mechanism for Eve Resource Sub-Classes
+EveResource.extend = utils.protoExtend;
+
+// Expose method-creator & prepared (basic) methods
+EveResource.method = require('./EveMethod');
+
 /**
  * Encapsulates request logic for an Eve Resource
  */
-class EveResource {
-  public _eve: any;
-  private initialize: Function;
-  public extend: Function;
-  public method: Function;
-  public path: string;
-  public overrideHost: string;
-  constructor(eve: any) {
-    this._eve = eve;
-    // Provide extension mechanism for Eve Resource Sub-Classes
-    this.extend = utils.protoExtend;
-
-    // Expose method-creator & prepared (basic) methods
-    this.method = require('./EveMethod');
-    // this.initialize.apply(this, arguments);
-    this.path = '';
-    
-    // String that overrides the base API endpoint. If `overrideHost` is not null
-    // then all requests for a particular resource will be sent to a base API
-    // endpoint as defined by `overrideHost`.
-    this.overrideHost = null;
-  }
+function EveResource(eve: any) {
+  this._eve = eve;
   
- /* 
+  this.initialize.apply(this, arguments);
+}
+
+EveResource.prototype = {
+
+  path: '',
+
+  initialize: function() {},
+
+  /* 
   * Function to override the default data processor. This allows full control
   * over how a EveResource's request data will get converted into an HTTP
   * body. This is useful for non-standard HTTP requests. The function should
   * take method name, data, and headers as arguments.
   */
-  requestParamProcessor: Function = null;  
+  requestParamProcessor: null,
 
-  createFullPath(requestPath: string, params: string) {
+  // String that overrides the base API endpoint. If `overrideHost` is not null
+  // then all requests for a particular resource will be sent to a base API
+  // endpoint as defined by `overrideHost`.
+  overrideHost: null,
+
+  createFullPath: function(requestPath: string, params: string) {
     if(params) return requestPath + '?' + params;   
     return requestPath 
-  };
+  },
 
-  createDeferred(callback: Function) {
+  createDeferred: function(callback: Function) {
     var deferred = Promise.defer();
 
     if (callback) {
@@ -64,9 +69,9 @@ class EveResource {
     }
 
     return deferred;
-  };
+  },
 
-  _timeoutHandler(timeout: number, req: globals.ClientReq, callback: Function) {
+  _timeoutHandler: function(timeout: number, req: http.ClientRequest, callback: Function) {
     var self = this;
     return function() {
       var timeoutErr = new Error('ETIMEDOUT');
@@ -84,9 +89,9 @@ class EveResource {
         null
       );
     }
-  };
+  },
 
-  _responseHandler(req: globals.ClientReq, callback: Function) {
+  _responseHandler: function(req: http.ClientRequest, callback: Function) {
     var self = this;     
       
     return function(res: http.ClientResponse) {
@@ -130,9 +135,9 @@ class EveResource {
         })
       });
     };
-  };
+  },
 
-  _errorHandler(req: globals.ClientReq, callback: Function) {
+  _errorHandler: function(req: http.ClientRequest, callback: Function) {
     var self = this;    
     return function(error: Error) {
       if (req._isAborted) {
@@ -149,20 +154,20 @@ class EveResource {
         null
       );
     }
-  };
+  },
 
-  _request(method: string, path: string, params: string, options: any, callback: Function) {
+  _request: function(method: string, path: string, params: string, options: any, callback: Function) {
     var self = this,
         headers: globals.Headers;
     // Grab client-user-agent before making the request:
     this._eve.getClientUserAgent(function(cua: string) {
-      var apiVersion = self._eve.getApiField('version') || '';    
+      var apiVersion = this._eve.getApiField('version') || '';    
     
       headers = {      
         'Accept': 'application/xml',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': options.contentLength,
-        'User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION,
+        'User-Agent': 'EveAPI-node/' + this._eve.getConstant('PACKAGE_VERSION'),
         'EveApi-Version': apiVersion,
         'X-Client-User-Agent': cua
       };
@@ -198,8 +203,8 @@ class EveResource {
         });
       });      
     }
-  };
+  },
 
 };
 
-export = EveResource;
+module.exports = EveResource;

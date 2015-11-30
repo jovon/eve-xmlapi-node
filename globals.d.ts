@@ -60,14 +60,4 @@ export interface EveKey {
   vCode: string;
   characterID?: string;
 }
-
-export interface ClientReq extends http.ClientRequest{
-  _isAborted?: boolean;
-}
-
-export interface Client {
-  _api: Api;
-  cache: any;
-  USER_AGENT: any;
-  [key: string]: any;
-}
+ 

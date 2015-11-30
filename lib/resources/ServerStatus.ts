@@ -1,16 +1,10 @@
-import Resource = require('../EveResource');
+import EveResource = require('../EveResource');
+var eveMethod = EveResource.method;
 
-class ServerStatus extends Resource {
-	public fetch: ((err: Error, data: any)=>void);
-	constructor(eve: any) {
-		super(eve)
-		this.fetch = this.method({
-			method: 'GET',
-			path: '/server/ServerStatus.xml.aspx',
-			cacheDuration: 180000,
-		})
-		
-	}
-}
-
-export = ServerStatus
+module.exports = EveResource.extend({
+	fetch: eveMethod({
+		method: 'GET',
+		path: '/server/ServerStatus.xml.aspx',
+		cacheDuration: 180000,		
+	}),
+})

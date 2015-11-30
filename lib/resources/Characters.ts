@@ -1,16 +1,12 @@
-import Resource = require('../EveResource');
+import EveResource = require('../EveResource');
+var eveMethod = EveResource.method;
 
-class Characters extends Resource {
-	public fetch: ((err: Error, data: any)=>void);
-	constructor(eve: any) {
-		super(eve)
-		this.fetch = this.method({
-			method: 'GET',
-			path: '/account/Characters.xml.aspx',
-			cacheDuration: 360000,
-			secured: true,  //requires a keyID and vCode query parameter if true
-		})
-	}
+module.exports = EveResource.extend({
+	fetch: eveMethod({
+		method: 'GET',
+		path: '/account/Characters.xml.aspx',
+		cacheDuration: 360000,
+		secured: true,  //requires a keyID and vCode query parameter if true
+	}),
 	
-}
-export = Characters
+})
