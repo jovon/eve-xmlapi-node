@@ -3,7 +3,7 @@ export = FileCache;
 declare class FileCache extends Cache {
     private _path;
     private _prefix;
-    constructor(options: any);
+    constructor(options?: any);
     setPath(p: string): void;
     getPath(): string;
     setPrefix(prefix: string): void;

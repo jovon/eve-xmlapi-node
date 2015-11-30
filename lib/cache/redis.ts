@@ -22,7 +22,7 @@ class RedisCache extends Cache {
   private _port: number;
   private _host: string;
   private _client: any;
-  constructor(options: any) {
+  constructor(options?: any) {
     super()
     options = options || {}
     this._port = options.port || 6379;
@@ -30,10 +30,8 @@ class RedisCache extends Cache {
     this._client = options.client || redis.createClient(this._port, this._host)  
   }
 
-
-
   /**
-  * Clear cache.
+  * Clear cache for testing.
   *
   * @param  {Function} cb Callback
   */
@@ -41,8 +39,7 @@ class RedisCache extends Cache {
     if(!cb) cb = function(){}
     this._client.flushdb()
     cb()
-  }
-  
+  }  
   
   /**
   * Store value in cache.
@@ -53,7 +50,7 @@ class RedisCache extends Cache {
   * @param {Function} cb       Callback(err, resp)
   */
   write = function (key: string, value: string, duration: number, cb: Function) {
-    var expireTime = this.getCurrentTime() + duration
+    var expireTime: number = this.getCurrentTime() + duration
     var data = {expireTime: expireTime, data: value}     
     this._client.hmset(key, data, function(err: Error, resp: string){
       if(err) return cb.call(this, err)         

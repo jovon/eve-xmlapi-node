@@ -162,7 +162,7 @@ class EveResource {
         'Accept': 'application/xml',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Length': options.contentLength,
-        'User-Agent': 'EveAPI-node/' + self._eve.getConstant('PACKAGE_VERSION'),
+        'User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION,
         'EveApi-Version': apiVersion,
         'X-Client-User-Agent': cua
       };

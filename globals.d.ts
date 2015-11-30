@@ -64,3 +64,10 @@ export interface EveKey {
 export interface ClientReq extends http.ClientRequest{
   _isAborted?: boolean;
 }
+
+export interface Client {
+  _api: Api;
+  cache: any;
+  USER_AGENT: any;
+  [key: string]: any;
+}

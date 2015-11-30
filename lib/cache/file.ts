@@ -22,7 +22,7 @@ export = FileCache
 class FileCache extends Cache {
   private _path: string;
   private _prefix: string;
-  constructor(options: any) {
+  constructor(options?: any) {
     super()
     var tmpDir = process.env.TMPDIR || process.env.TEMP || '/tmp'
     options = options || {}
