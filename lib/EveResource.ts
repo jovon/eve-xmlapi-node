@@ -54,7 +54,7 @@ class EveResource {
     var deferred = Promise.defer();
 
     if (callback) {
-      // Callback, if provided, is a simply translated to Promise'esque:
+      // Callback, if provided, is simply translated to Promise'esque:
       // (Ensure callback is called outside of promise stack)
       deferred.promise.then(function(res) {
           setTimeout(function() { callback(null, res) }, 0);

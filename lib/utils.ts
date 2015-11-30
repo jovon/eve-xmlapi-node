@@ -1,7 +1,7 @@
 import qs = require('qs');
 import _ = require('lodash');
 import globals = require('../globals')
-
+var error = require('./Error')
 var hasOwn = {}.hasOwnProperty;
 var toString = {}.toString;
 
@@ -25,9 +25,20 @@ var utils = module.exports = {
     } else {
       return this.stringifyRequestData(data || {});
     }
-    return requestParams    
+    return requestParams
   },
-
+  
+  keyObjToStr(self: any, arg: any, deferred: any) {  
+    var params = {}
+    var eveApiKeyObj: globals.EveKey = self._eve.getApiKey(arg) 
+    if(this.isKeyHash(eveApiKeyObj)) {
+      if(this.isObject(arg)) _.assign(params, eveApiKeyObj, arg)
+    } else {
+      return deferred.reject(new error.EveInvalidRequestError("Missing keyID or vCode"))
+    }
+    return this.stringifyRequestData(params || arg)
+  },
+  
   /**
    * Stringifies an Object, accommodating nested objects
    * (forming the conventional key 'parent[child]=value')

@@ -37,7 +37,7 @@ function eveMethod(spec: globals.Spec) {
         keyString: string = '';
         
     if(securedResource) {
-      keyString = verifyKeyObj(self, args[0], deferred)      
+      keyString = utils.keyObjToStr(self, args[0], deferred)      
     } else {      
       requestParams = utils.formatRequestParams(self, 
                                                 requestMethod, 
@@ -91,17 +91,6 @@ function eveMethod(spec: globals.Spec) {
 
 function contentLength(keyStr: string) {
   return keyStr ? keyStr.length : 0
-}
-
-function verifyKeyObj(self: any, arg: any, deferred: any) {  
-    var params = {}
-    var eveApiKeyObj: globals.EveKey = self._eve.getApiKey(arg) 
-    if(utils.isKeyHash(eveApiKeyObj)) {
-      if(utils.isObject(arg)) _.assign(params, eveApiKeyObj, arg)
-    } else {
-      return deferred.reject(new Error.EveInvalidRequestError("Missing keyID or vCode"))
-    }
-    return utils.stringifyRequestData(params || arg)
 }
 
 
