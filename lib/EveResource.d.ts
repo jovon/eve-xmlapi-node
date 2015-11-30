@@ -15,6 +15,6 @@ declare class EveResource {
     _timeoutHandler(timeout: number, req: globals.ClientReq, callback: Function): () => void;
     _responseHandler(req: globals.ClientReq, callback: Function): (res: http.ClientResponse) => void;
     _errorHandler(req: globals.ClientReq, callback: Function): (error: Error) => void;
-    _request(method: string, path: string, params: string, options: any, callback: Function): void;
+    _request(method: string, path: string, params: string, headers: globals.Headers, callback: Function): void;
 }
 export = EveResource;

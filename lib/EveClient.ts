@@ -17,7 +17,6 @@ var resources: Resources = {
   Characters: require('./resources/Characters')
 }
 
-
 interface Resources {
   [key: string]: any
 }
@@ -26,8 +25,7 @@ class EveClient implements globals.Client{
     _api: globals.Api;
     EveResource: any;
     cache: any;
-    private _cache: any;
-    
+    private _cache: any;    
     PACKAGE_VERSION: any;
     private USER_AGENT: any;
     [key: string]: any;
@@ -61,9 +59,7 @@ class EveClient implements globals.Client{
       
       var packageJson = require('../package.json')
       this.PACKAGE_VERSION = packageJson.version;
-      
-      this.USER_AGENT = null
-      
+            
       this._prepResources()
     }  
     
@@ -151,16 +147,8 @@ class EveClient implements globals.Client{
       return this._api[key];
     };
     
-    getUserAgent(cb: (cua: string)=>void) {
-      var self = this;
-      if(this.USER_AGENT) {
-        return cb(JSON.stringify(self.USER_AGENT))
-      }
-      // If the UserAgent isn't set then grab some info on the local system. 
-      exec('uname -a', function(err: Error, uname: string) {
-        self.USER_AGENT = uname || 'UNKNOWN';
-        cb(JSON.stringify(self.USER_AGENT));
-      });
+    getUserAgent(): string {      
+      return JSON.stringify(this.USER_AGENT)      
     };
     
     setUserAgent(ua: any) {

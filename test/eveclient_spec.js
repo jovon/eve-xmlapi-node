@@ -16,11 +16,8 @@ describe('EveClient Module', function() {
       var eve = require('../lib/EveClient')
       
       var ua = {'User-Agent': {lang:'node'}}
-      eve.setUserAgent(ua)      
-      eve.getUserAgent(function(c) {
-        expect(JSON.parse(c)).to.deep.equal(ua);
-      });
-      
+      eve.setUserAgent(ua)
+      expect(JSON.parse(eve.getUserAgent())).to.deep.equal(ua);      
     });
   });
 
@@ -40,7 +37,7 @@ describe('EveClient Module', function() {
     });
   });
   
-  describe('setApiKey', function(){
+  describe('ApiKey', function(){
     var eve = require('../lib/EveClient')
     eve.setApiKey({})
     it('Should set the key', function(){
@@ -50,7 +47,7 @@ describe('EveClient Module', function() {
     })
   })
   
-  describe('cache getter/setter', function(){
+  describe('Cache', function(){
     var eve = require('../lib/EveClient')
     it('Should default to MemoryCache', function(){
       expect(eve.getCache()).to.be.an.instanceof(MemoryCache)
@@ -63,7 +60,7 @@ describe('EveClient Module', function() {
     })
   })
   
-  describe('get/set host', function(){
+  describe('Host', function(){
     var eve = require('../lib/EveClient')
     it('Should set host', function(){
       var host = 'api.com'

@@ -37,17 +37,25 @@ function eveMethod(spec: globals.Spec) {
         keyString: string = '';
         
     if(securedResource) {
-      keyString = verifyKeyObj(self, args[0], deferred)
-      
-    } else {
-      
+      keyString = verifyKeyObj(self, args[0], deferred)      
+    } else {      
       requestParams = utils.formatRequestParams(self, 
                                                 requestMethod, 
                                                 args[0], 
                                                 deferred);
-    }
-                                                
-    options = {contentLength: contentLength(keyString)};                                                 
+    }                                                
+    
+    var apiVersion = self._eve.getApiField('version') || '';    
+  
+    var headers: globals.Headers = {      
+      'Accept': 'application/xml',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': contentLength(keyString),
+      'User-Agent': self._eve.getUserAgent() || '',
+      'Client-Version': apiVersion,
+      'X-Client-User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION + ' (jvnpackard@gmail.com)'
+    };
+    
     requestPath = this.createFullPath(commandPath, requestParams)
     
     cacheKey = (this.overrideHost || this._eve.getApiField('host')) + requestPath
@@ -74,7 +82,7 @@ function eveMethod(spec: globals.Spec) {
       if(err) return requestCallback(err, null, false)      
       if(data && typeof data === 'string') return requestCallback(null, JSON.parse(data), true)      
       
-      self._request(requestMethod, requestPath, keyString, options, requestCallback);
+      self._request(requestMethod, requestPath, keyString, headers, requestCallback);
   
       return deferred.promise;
     })

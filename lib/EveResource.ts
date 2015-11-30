@@ -151,53 +151,33 @@ class EveResource {
     }
   };
 
-  _request(method: string, path: string, params: string, options: any, callback: Function) {
-    var self = this,
-        headers: globals.Headers;
-    // Grab client-user-agent before making the request:
-    this._eve.getUserAgent(function(cua: string) {
-      var apiVersion = self._eve.getApiField('version') || '';    
+  _request(method: string, path: string, params: string, headers: globals.Headers, callback: Function) {
+    var self = this;    
+    var timeout = self._eve.getApiField('timeout');    
     
-      headers = {      
-        'Accept': 'application/xml',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': options.contentLength,
-        'User-Agent': cua,
-        'Client-Version': apiVersion,
-        'X-Client-User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION + ' (jvnpackard@gmail.com)'
-      };
-      
-      makeRequest();
-    });
-
-    function makeRequest() {
-      var timeout = self._eve.getApiField('timeout');
-      var host = self.overrideHost || self._eve.getApiField('host');      
-      
-      var opt = {
-        host: host,
-        port: self._eve.getApiField('port'),
-        path: path,
-        method: method,
-        agent: self._eve.getApiField('agent'),
-        headers: headers,
-        keepAlive: true,
-        ciphers: 'DEFAULT:!aNULL:!eNULL:!LOW:!EXPORT:!SSLv2:!MD5',
-      }
-      var isInsecureConnection = self._eve.getApiField('protocol') === 'http' ,
-          req = (isInsecureConnection ? http : https).request(opt);
-      
-      req.setTimeout(timeout, self._timeoutHandler(timeout, req, callback));
-      req.on('response', self._responseHandler(req, callback));
-      req.on('error', self._errorHandler(req, callback));
-      req.on('socket', function(socket: any) {
-        socket.on((isInsecureConnection ? 'connect' : 'secureConnect'), function() {
-          // Send payload; we're safe:          
-          req.write(params || '');
-          req.end();
-        });
-      });      
+    var opt: http.RequestOptions = {
+      host: self.overrideHost || self._eve.getApiField('host'),
+      port: self._eve.getApiField('port'),
+      path: path,
+      method: method,
+      agent: self._eve.getApiField('agent'),
+      headers: headers,      
     }
+    
+    var isInsecureConnection = self._eve.getApiField('protocol') === 'http' ,
+        req = (isInsecureConnection ? http : https).request(opt);
+    
+    req.setTimeout(timeout, self._timeoutHandler(timeout, req, callback));
+    req.on('response', self._responseHandler(req, callback));
+    req.on('error', self._errorHandler(req, callback));
+    req.on('socket', function(socket: any) {
+      socket.on((isInsecureConnection ? 'connect' : 'secureConnect'), function() {
+        // Send payload; we're safe:          
+        req.write(params || '');
+        req.end();
+      });
+    });      
+    
   };
 
 };
