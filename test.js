@@ -1,5 +1,5 @@
 var eve = require('./lib/EveClient')
-eve.setUserAgent('Testing EveApi-Node/1.0.0')
+eve.setUserAgent('Testing EveApi-Node/0.0.1')
 eve.setCache('file');
 var key = require('./test/testUtils').getUserEveKey()
 
@@ -17,14 +17,18 @@ eve.serverStatus.transformResponseData = function(resp){
 	return resp
 }
 
-var cb = function handler(err, data) {
-	if(err) console.log("test err", err)
-	if(data) console.log("test data", data)
-	return
+var handler = function handler(data) {
+	if(data) console.log("test data", data)	
 }
 eve.setHost('api.testeveonline.com')
 
-eve.serverStatus.fetch(cb)
+// eve.serverStatus.fetchP().then(function(data){
+// 	console.log(data)
+// })
 // eve.characterID.fetch('Biae', cb)
-// eve.characters.fetch(key, cb)
+eve.characters.fetchP(key)
+				.then(handler)
+				.catch(function(e){
+					console.log("error: ", e)
+				})
 

@@ -21,7 +21,7 @@ var utils = module.exports = {
       requestParams = self.requestParamProcessor(method, data);      
       if(requestParams instanceof Error) {
         return deferred.reject(requestParams)
-      }      
+      }
     } else {
       return this.stringifyRequestData(data || {});
     }

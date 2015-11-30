@@ -1,5 +1,6 @@
 import utils = require('./utils')
 import globals = require('../globals')
+import Promise = require('bluebird')
 
 var exec = require('child_process').exec,
     DEFAULT_HOST = 'api.eveonline.com',
@@ -24,9 +25,9 @@ interface Resources {
 class EveClient implements globals.Client{
     _api: globals.Api;
     EveResource: any;
-    cache: any;
-    private _cache: any;    
+    cache: any;       
     PACKAGE_VERSION: any;
+    private _cache: any;
     private USER_AGENT: any;
     [key: string]: any;
     constructor() {        
@@ -53,10 +54,8 @@ class EveClient implements globals.Client{
       this.cache.MemoryCache = require('./cache/memory')
       this.cache.FileCache = require('./cache/file')
       this.cache.RedisCache = require('./cache/redis')
-      this._cache = new this.cache.MemoryCache()    
-          
-      var version: string;        
-      
+      this._cache = new this.cache.MemoryCache()          
+            
       var packageJson = require('../package.json')
       this.PACKAGE_VERSION = packageJson.version;
             
@@ -161,7 +160,8 @@ class EveClient implements globals.Client{
     _prepResources() {
       for (var name in resources) {
         var resourceMethod: string = name[0].toLowerCase() + name.substring(1)  // (i.e. change ServerStatus to serverStatus)
-        this[resourceMethod] = new resources[name](this);                       // make the resource a method on EveClient
+        this[resourceMethod] = new resources[name](this);           // make the resource a method on EveClient
+        this[resourceMethod].fetchP = Promise.promisify(this[resourceMethod].fetch)
       }
     };
   
