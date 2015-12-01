@@ -11,18 +11,7 @@ class Characters extends Resource {
 			path: '/account/Characters.xml.aspx',
 			cacheDuration: 360000,
 		})
-		this.authParamProcessor = function(self: any, params: any, deferred: any): string{
-			var eveApiKey = this._eve.getApiKey(params)
-			if(utils.isKeyHash(eveApiKey)) {
-				return utils.stringifyRequestData(eveApiKey)
-			} else {			
-				return deferred.reject(
-						new Error.EveInvalidRequestError(
-						{message: "Characters requires an object with a keyID and vCode property."}
-						)
-					)
-			}
-		};
+		this.authParamProcessor = utils.keyVCodeProcessor
 	}
 	
 }

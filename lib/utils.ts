@@ -34,6 +34,47 @@ var utils = {
     
   },
   
+  /* 
+  * A param processor for resources than require just the keyID and vCode for authentication
+  */
+  keyVCodeProcessor(self: any, params: any, deferred: any): string{
+    var eveApiKey = this._eve.getApiKey(params)
+    if(utils.isKeyHash(eveApiKey)) {
+      return utils.stringifyRequestData(eveApiKey)
+    } else {			
+      return deferred.reject(
+          new error.EveInvalidRequestError(
+          {message: "Requires an object with a keyID and vCode property."}
+          )
+        )
+    }
+  },
+  
+  /* 
+  * A param processor for resources than require just the keyID, vCode, and CharacterID for authentication
+  */
+  keyVCodeCharIDProcessor(self: any, params: any, deferred: any): string{
+    var eveApiKey = this._eve.getApiKey(params)
+    if(params && params.characterID && typeof params === 'object') {
+      if(eveApiKey) {
+        eveApiKey.characterID = params.characterID
+      }
+      return utils.stringifyRequestData(eveApiKey)
+    } else if ((typeof params === 'string' && params != '') || typeof params === 'number') {
+      if(eveApiKey) {
+        eveApiKey.characterID = params
+      }
+      return utils.stringifyRequestData(eveApiKey)
+    } 
+    return deferred.reject(
+        new error.EveInvalidRequestError(
+        {message: "Requires a keyID, vCode and characterID property."}
+        )
+      )
+    
+  },
+    
+  
   /**
    * Stringifies an Object, accommodating nested objects
    * (forming the conventional key 'parent[child]=value')
