@@ -20,7 +20,6 @@ describe('Skill Queue', function() {
     
     it('#fetch returns an Error', function(done){
         var eve = testUtils.getSpyableEveApi()
-        eve.setApiKey({})
         eve.skillQueue.fetch({}, function(err, queue){
           expect(err.type).to.equal('EveInvalidRequestError')
           done()

@@ -18,4 +18,7 @@ declare module _Error {
     class EveAPIError extends EveError {
         constructor(raw: any);
     }
+    class EveConnectionError extends EveError {
+        constructor(raw: any);
+    }
 }

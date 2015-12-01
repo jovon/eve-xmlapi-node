@@ -1,12 +1,12 @@
 'use strict';
 
 var testUtils = require('../testUtils'),
-    eve = testUtils.getSpyableEveApi(),
     expect = require('chai').expect,
     testKey = testUtils.getUserEveKey();
     
 describe('Characters', function() {          
-    it('#fetch Sends the correct request with param object', function(done) {               
+    it('#fetch Sends the correct request with param object', function(done) {        
+        var eve = testUtils.getSpyableEveApi();              
         eve.characters.fetch(testKey, function(err, data){
             expect(eve.LAST_REQUEST).to.deep.equal({
                 method: 'GET',
@@ -15,12 +15,14 @@ describe('Characters', function() {
                 headers: {},
             });
             done()
-        }) 
+            eve = null;
+        })
     });
     
     it('#fetch returns an Error', function(done){
-        eve.setApiKey({})        
-        eve.characters.fetch({}, function(err, charIDs){          
+        var eve = testUtils.getSpyableEveApi();
+        eve.setApiKey({}) 
+        eve.characters.fetch({}, function(err, charIDs){
           expect(err.type).to.equal('EveInvalidRequestError')
           done()
         }) 

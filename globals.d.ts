@@ -43,7 +43,6 @@ export interface Spec {
    path: string;
    cacheDuration: number;
    secured?: boolean;
-   requestParamProcessor?: (self: any, method: string, params: any, cb: Function)=>any;
 }
  
 export interface EveKey {

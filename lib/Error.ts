@@ -1,11 +1,7 @@
-'use strict';
-
-var utils = require('./utils');
 
 export = _Error;
 
 module _Error {  
-  
   /**
   * Create subclass of internal Error klass
   * (Specifically for errors returned from Eve's XML API)
@@ -24,7 +20,7 @@ module _Error {
       super()
       
       this.type = this.type || 'Generic';
-      this.stack = (new Error(raw.message)).stack;
+      this.stack = (new Error(raw.message)).stack.split('\n');
       this.rawType = raw.type;
       this.code = raw.code;
       this.param = raw.param;
@@ -33,7 +29,7 @@ module _Error {
       this.raw = raw;
       this.requestId = raw.requestId;
       this.statusCode = raw.statusCode;      
-    }        
+    }    
   };  
 
   export class EveInvalidRequestError extends EveError{  
@@ -47,6 +43,13 @@ module _Error {
     constructor(raw: any) {
       super(raw)
       this.type = 'EveAPIError'
+    }
+  }
+  
+  export class EveConnectionError extends EveError{  
+    constructor(raw: any) {
+      super(raw)
+      this.type = 'EveConnectionError'
     }
   }
 }

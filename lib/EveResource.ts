@@ -6,8 +6,8 @@ import _ = require('lodash');
 import globals = require('../globals')
 var parseString = require('xml2js').parseString;
 
-var utils = require('./utils'),
-    Error = require('./Error');
+var utils = require('./utils');
+import error = require('./Error');
 
 var hasOwn = {}.hasOwnProperty;
 
@@ -43,10 +43,12 @@ class EveResource {
   * body. This is useful for non-standard HTTP requests. The function should
   * take method name, data, and headers as arguments.
   */
-  requestParamProcessor: Function = null;  
+  requestParamProcessor: Function = null;
+  
+  authParamProcessor: Function = null;  
 
-  createFullPath(requestPath: string, params: string) {
-    if(params) return requestPath + '?' + params;   
+  createFullPath(requestPath: string, params: string): string {
+    if(params) requestPath = requestPath + '?' + params;
     return requestPath 
   };
 
@@ -69,15 +71,14 @@ class EveResource {
   _timeoutHandler(timeout: number, req: globals.ClientReq, callback: Function) {
     var self = this;
     return function() {
-      var timeoutErr = new Error('ETIMEDOUT');
-      timeoutErr.code = 'ETIMEDOUT';
+      var timeoutErr = new Error('ETIMEDOUT');      
 
       req._isAborted = true;
       req.abort();
 
       callback.call(
         self,
-        new Error.EveConnectionError({
+        new error.EveConnectionError({
           message: 'Request aborted due to timeout being reached (' + timeout + 'ms)',
           detail: timeoutErr,
         }),
@@ -103,30 +104,17 @@ class EveResource {
         var headers = res.headers || {};
         parseString(response, function(err: Error, result: any){
           if (err) return callback.call(self, new Error("Error parsing"))
-          try {            
-            if (result && result.eveapi && result.eveapi.error) {              
-              var errorMessage = result.eveapi.error[0]._
-              var errorCode = result.eveapi.error[0].$.code
-                            
-              err = new Error.EveAuthenticationError({message: errorMessage, code: errorCode})
-              
-              callback.call(self, err, null);
-            } else {                            
-              callback.call(self, null, result);
-            }
-          } catch (e) {                    
-            return callback.call(
-              self,
-              new Error.EveAPIError({
-                message: 'Invalid XML received from the Eve API',
-                response: response,
-                exception: e,
-                requestId: headers['request-id'],
-              }),
-              null
-            );
-          }     
           
+          if (result && result.eveapi && result.eveapi.error) {              
+            var errorMessage = result.eveapi.error[0]._
+            var errorCode = result.eveapi.error[0].$.code
+            
+            callback.call(self,
+              new error.EveAPIError({message: errorMessage, code: errorCode}),
+              null);
+          } else {                            
+            callback.call(self, null, result);
+          }
         })
       });
     };
@@ -134,7 +122,7 @@ class EveResource {
 
   _errorHandler(req: globals.ClientReq, callback: Function) {
     var self = this;    
-    return function(error: Error) {
+    return function(err: Error) {
       if (req._isAborted) {
         // already handled
         return;
@@ -142,9 +130,9 @@ class EveResource {
       
       callback.call(
         self,
-        new Error.EveConnectionError({
+        new error.EveConnectionError({
           message: 'An error occurred with our connection to Eve Api',
-          detail: error,
+          detail: err,
         }),
         null
       );

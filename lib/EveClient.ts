@@ -98,8 +98,6 @@ class EveClient implements globals.Client{
           default:
             this._cache = new this.cache.MemoryCache()        
         }
-      } else {
-        throw Error('Missing cache type string')
       }
     };
     
@@ -109,9 +107,9 @@ class EveClient implements globals.Client{
     
     // @param  {Object}   key   Eve Apikey with vCode and keyID properties
     setApiKey(key: any) {
-      if (key) {      
-          this._setApiField('keyID', key.keyID || key.keyid);     
-          this._setApiField('vCode', key.vCode || key.vcode);      
+      if (key) {
+          this._setApiField('keyID', key.keyID);     
+          this._setApiField('vCode', key.vCode);      
       }
     };
     

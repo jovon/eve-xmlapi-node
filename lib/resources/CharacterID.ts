@@ -1,6 +1,6 @@
 import Resource = require('../EveResource');
 import Error = require('../Error')
-var utils = require('../utils')
+import utils = require('../utils')
 
 class CharacterID extends Resource {
 	public fetch: ((err: Error, data: any)=>void);
@@ -11,7 +11,7 @@ class CharacterID extends Resource {
 			path: '/eve/CharacterID.xml.aspx',
 			cacheDuration: 360000		
 		})
-		this.requestParamProcessor = function(method: string, params: any) {
+		this.requestParamProcessor = function(params: any): any {
 			if(params && params.names && typeof params === 'object') {
 				if(Array.isArray(params.names)) {
 					return utils.stringifyRequestData({names: params.names.join(',')})

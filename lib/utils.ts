@@ -4,10 +4,10 @@ import globals = require('../globals')
 var error = require('./Error')
 var hasOwn = {}.hasOwnProperty;
 var toString = {}.toString;
+export = utils
+var utils = {
 
-var utils = module.exports = {
-
-  isKeyHash: function(o: globals.EveKey) {
+  isKeyHash: function(o: any) {
     return _.isPlainObject(o) && o.hasOwnProperty('keyID') && o.hasOwnProperty('vCode')
   },
 
@@ -15,15 +15,10 @@ var utils = module.exports = {
     return _.isPlainObject(o);
   },
   
-  formatRequestParams(self: any, method: string, data: any, deferred: any) {
-    var requestParams: any;    
-    if (self.requestParamProcessor) {
-      requestParams = self.requestParamProcessor(method, data);      
-      if(requestParams instanceof Error) {
-        return deferred.reject(requestParams)
-      }
-    } else {
-      return this.stringifyRequestData(data || {});
+  formatRequestParams(self: any, data: any, deferred: any) {
+    var requestParams = self.requestParamProcessor(data);      
+    if(requestParams instanceof Error) {
+      return deferred.reject(requestParams)
     }
     return requestParams
   },
@@ -32,11 +27,11 @@ var utils = module.exports = {
     var params = {}
     var eveApiKeyObj: globals.EveKey = self._eve.getApiKey(arg) 
     if(this.isKeyHash(eveApiKeyObj)) {
-      if(this.isObject(arg)) _.assign(params, eveApiKeyObj, arg)
+      return this.stringifyRequestData(eveApiKeyObj)
     } else {
       return deferred.reject(new error.EveInvalidRequestError("Missing keyID or vCode"))
     }
-    return this.stringifyRequestData(params || arg)
+    
   },
   
   /**

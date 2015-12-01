@@ -34,29 +34,29 @@ function eveMethod(spec: globals.Spec) {
         requestPath: string = '',
         cacheKey: string = '',
         requestParams = '',
-        keyString: string = '';
+        auth: string = '';
         
-    if(securedResource) {
-      keyString = utils.keyObjToStr(self, args[0], deferred)      
-    } else {      
+    if(self.authParamProcessor) {
+      auth = self.authParamProcessor(self, args[0], deferred)      
+    }
+    
+    if (self.requestParamProcessor) {
       requestParams = utils.formatRequestParams(self, 
-                                                requestMethod, 
                                                 args[0], 
                                                 deferred);
-    }                                                
-    
+    }
     var apiVersion = self._eve.getApiField('version') || '';    
   
     var headers: globals.Headers = {      
       'Accept': 'application/xml',
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': contentLength(keyString),
+      'Content-Length': contentLength(auth),
       'User-Agent': self._eve.getUserAgent() || '',
       'Client-Version': apiVersion,
       'X-Client-User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION + ' (jvnpackard@gmail.com)'
     };
     
-    requestPath = this.createFullPath(commandPath, requestParams)
+    requestPath = this.createFullPath(commandPath, requestParams, auth)
     
     cacheKey = (this.overrideHost || this._eve.getApiField('host')) + requestPath
     
@@ -82,7 +82,7 @@ function eveMethod(spec: globals.Spec) {
       if(err) return requestCallback(err, null, false)      
       if(data && typeof data === 'string') return requestCallback(null, JSON.parse(data), true)      
       
-      self._request(requestMethod, requestPath, keyString, headers, requestCallback);
+      self._request(requestMethod, requestPath, auth, headers, requestCallback);
   
       return deferred.promise;
     })
