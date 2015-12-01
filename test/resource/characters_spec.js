@@ -3,28 +3,55 @@
 var testUtils = require('../testUtils'),
     expect = require('chai').expect,
     testKey = testUtils.getUserEveKey();
-    
-describe('Characters', function() {          
-    it('#fetch Sends the correct request with param object', function(done) {        
-        var eve = testUtils.getSpyableEveApi();              
-        eve.characters.fetch(testKey, function(err, data){
-            expect(eve.LAST_REQUEST).to.deep.equal({
-                method: 'GET',
-                url: '/account/Characters.xml.aspx',
-                data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
-                headers: {},
-            });
-            done()
-            eve = null;
+
+describe('Characters', function () {
+    describe('#fetch', function () {
+        it('Sends the correct request with param object', function (done) {
+            var eve = testUtils.getSpyableEveApi();
+            eve.characters.fetch(testKey, function (err, data) {
+                expect(eve.LAST_REQUEST).to.deep.equal({
+                    method: 'GET',
+                    url: '/account/Characters.xml.aspx',
+                    data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
+                    headers: {},
+                });
+                done()
+                eve = null;
+            })
+        });
+
+        it('returns an Error', function (done) {
+            var eve = testUtils.getSpyableEveApi();
+            eve.setApiKey({ 'keyID': '', 'vCode': '' })
+            eve.characters.fetch({}, function (err, charIDs) {
+                expect(err.type).to.equal('EveInvalidRequestError')
+                done()
+            })
         })
-    });
-    
-    it('#fetch returns an Error', function(done){
-        var eve = testUtils.getSpyableEveApi();
-        eve.setApiKey({}) 
-        eve.characters.fetch({}, function(err, charIDs){
-          expect(err.type).to.equal('EveInvalidRequestError')
-          done()
-        }) 
+    })
+    describe('#fetchP', function () {
+        it('Sends the correct request with param object', function () {
+            var eve = testUtils.getSpyableEveApi()
+            eve.characters.fetchP(testKey).then(function (queue) {
+                expect(eve.LAST_REQUEST).to.deep.equal({
+                    method: 'GET',
+                    url: '/account/Characters.xml.aspx',
+                    data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
+                    headers: {},
+                })
+            }).catch(function (err) {
+                expect(err).to.be.a('null')
+            })
+        });
+
+        it('returns an Error', function () {
+            var eve = testUtils.getSpyableEveApi()
+            eve.setApiKey({ 'keyID': '', 'vCode': '' })
+            eve.characters.fetchP({}).then(function (queue) {
+                expect(queue).to.be.a('null')
+            }).catch(function (err) {
+                expect(err.type).to.equal('EveInvalidRequestError')
+            })
+        })
     })
 })  

@@ -32,7 +32,7 @@ class EveClient implements globals.Client{
     private _cache: any;
     private USER_AGENT: any;
     [key: string]: any;
-    constructor() {        
+    constructor() {
       if (!(this instanceof EveClient)) {
         return new EveClient();
       }
