@@ -1,6 +1,6 @@
 var eve = require('./lib/EveClient')
 eve.setUserAgent('Testing EveApi-Node/0.0.1')
-eve.setCache('file');
+// eve.setCache('file');
 var key = require('./test/testUtils').getUserEveKey()
 var config = require('./test/config')
 
@@ -13,9 +13,11 @@ eve.transformAllResponses = function(resp){
 	if(resp.eveapi.result) results.result = resp.eveapi.result[0]
 	return results
 }
-eve.serverStatus.transformResponseData = function(resp){
-	resp.result.serverOpen = resp.result.serverOpen[0]
-	resp.result.onlinePlayers = resp.result.onlinePlayers[0]	
+eve.accountStatus.transformResponseData = function(resp){
+	resp.result.paidUntil = resp.result.paidUntil[0]
+	resp.result.createDate = resp.result.createDate[0]
+	resp.result.logonCount = resp.result.logonCount[0]
+	resp.result.logonMinutes = resp.result.logonMinutes[0]	
 	return resp
 }
 
@@ -31,13 +33,21 @@ var cb = function cb(err, data) {
 	return
 }
 eve.setHost('api.testeveonline.com')
-
+eve.setApiKey(key)
 // eve.serverStatus.fetchP().then(dataHandler)
 // eve.characterID.fetch('Biae', cb)
-eve.characters.fetchP({})
-				.then(dataHandler)
-				.catch(errorHandler)
-// eve.setApiKey(key)
+// eve.characters.fetchP({})
+// 				.then(dataHandler)
+// 				.catch(errorHandler)
+
 // eve.skillQueue.fetchP({characterID: config.TEST_CHARID})
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
+
+// eve.charAccountBalance.fetchP({characterID: config.TEST_CHARID})
+// 				.then(dataHandler)
+// 				.catch(errorHandler)
+
+eve.characterSheet.fetchP({characterID: config.TEST_CHARID})
+				.then(dataHandler)
+				.catch(errorHandler)

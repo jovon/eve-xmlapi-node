@@ -15,7 +15,9 @@ var resources: Resources = {
   CharacterID: require('./resources/CharacterID'),
   ServerStatus: require('./resources/ServerStatus'),
   Characters: require('./resources/Characters'),
-  CharAccountBalance: require('./resource/CharAccountBalance')
+  CharAccountBalance: require('./resources/CharAccountBalance'),
+  AccountStatus: require('./resources/AccountStatus'),
+  CharacterSheet: require('./resources/CharacterSheet')
 }
 
 interface Resources {

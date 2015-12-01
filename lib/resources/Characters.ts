@@ -9,7 +9,7 @@ class Characters extends Resource {
 		this.fetch = this.method({
 			method: 'GET',
 			path: '/account/Characters.xml.aspx',
-			cacheDuration: 360000,
+			cacheDuration: 3600000,
 		})
 		this.authParamProcessor = utils.keyVCodeProcessor
 	}

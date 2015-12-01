@@ -9,7 +9,7 @@ class CharacterID extends Resource {
 		this.fetch =  this.method({
 			method: 'GET',
 			path: '/eve/CharacterID.xml.aspx',
-			cacheDuration: 360000		
+			cacheDuration: 3600000		
 		})
 		this.requestParamProcessor = function(params: any): any {
 			if(params && params.names && typeof params === 'object') {

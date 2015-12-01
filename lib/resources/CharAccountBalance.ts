@@ -9,7 +9,7 @@ class CharAccountBalance extends Resource {
 		this.fetch = this.method({
 			method: 'GET',
 			path: '/char/AccountBalance.xml.aspx',
-			cacheDuration: 360000,			
+			cacheDuration: 900000,			
 		})
 		this.authParamProcessor = utils.keyVCodeCharIDProcessor
 	}
