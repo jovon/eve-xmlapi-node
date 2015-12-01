@@ -47,7 +47,7 @@ function eveMethod(spec: globals.Spec) {
     }
     var apiVersion = self._eve.getApiField('version') || '';    
   
-    var headers: globals.Headers = {      
+    var headers: globals.Headers = {
       'Accept': 'application/xml',
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': contentLength(auth),

@@ -1,6 +1,12 @@
 import utils = require('./utils')
 import globals = require('../globals')
 import Promise = require('bluebird')
+import Cache = require('./cache/cache')
+import MemoryCache = require('./cache/memory')
+import FileCache = require('./cache/file')
+import RedisCache = require('./cache/redis')
+import EveResource = require('./EveResource')
+var packageJson = require('../package.json')
 
 var DEFAULT_HOST = 'api.eveonline.com',
     DEFAULT_BASE_PATH = '',
@@ -49,16 +55,16 @@ class EveClient implements globals.Client{
         dev: true,
       };  
       
-      this.EveResource = require('./EveResource')  
+      this.EveResource = EveResource  
       
       this.cache = {}  
-      this.cache.Cache = require('./cache/cache')
-      this.cache.MemoryCache = require('./cache/memory')
-      this.cache.FileCache = require('./cache/file')
-      this.cache.RedisCache = require('./cache/redis')
+      this.cache.Cache = Cache
+      this.cache.MemoryCache = MemoryCache
+      this.cache.FileCache = FileCache
+      this.cache.RedisCache = RedisCache
       this._cache = new this.cache.MemoryCache()          
             
-      var packageJson = require('../package.json')
+      
       this.PACKAGE_VERSION = packageJson.version;
             
       this._prepResources()
