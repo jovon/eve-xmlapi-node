@@ -1,7 +1,8 @@
 import qs = require('qs');
 import _ = require('lodash');
 import globals = require('../globals')
-var error = require('./Error')
+import Promise = require('bluebird')
+import error = require('./Error')
 var hasOwn = {}.hasOwnProperty;
 var toString = {}.toString;
 export = utils
@@ -17,18 +18,13 @@ var utils = {
     return _.isPlainObject(o);
   },
   
-  formatRequestParams(self: any, data: any, deferred: any): string {
-    var requestParams = self.requestParamProcessor(data, deferred);    
-    return utils.stringifyRequestData(requestParams)
-  },
-  
-      
+     
   // },
   
   /* 
   * A param processor for resources than require just the keyID and vCode for authentication
   */
-  keyVCodeProcessor(self: any, params: globals.Params, deferred: any): globals.Params{
+  keyVCodeProcessor(self: any, params: globals.Params, deferred: Promise.Resolver<Error>): globals.Params{
     var eveApiKey: globals.EveKey = self._eve.getApiKey(params)
     if(eveApiKey) {
       return eveApiKey
@@ -43,7 +39,7 @@ var utils = {
   /* 
   * A param processor for resources than require just the keyID, vCode, and CharacterID for authentication
   */
-  keyVCodeCharIDProcessor(self: any, params: globals.Params, deferred: any): globals.Params{
+  keyVCodeCharIDProcessor(self: any, params: globals.Params, deferred: Promise.Resolver<Error>): globals.Params{
     var eveApiKey: globals.Params = utils.keyVCodeProcessor(self, params, deferred)
     if(params && params.characterID && typeof params === 'object') {
       if(eveApiKey) {
