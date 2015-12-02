@@ -49,8 +49,6 @@ eve.setApiKey(key)
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
-eve.upcomingCalendarEvents.fetchP({characterID: config.TEST_CHARID})
-				.then(function dataHandler(data) {
-					console.log("test data: ", data.result.rowset[0])	
-				})
+eve.allianceList.fetchP({version: 1})//{characterID: config.TEST_CHARID})
+				.then(dataHandler)
 				.catch(errorHandler)

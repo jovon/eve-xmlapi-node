@@ -5,7 +5,7 @@ declare var utils: {
     isKeyHash: (o: any) => any;
     isObject: (o: any) => boolean;
     keyVCodeProcessor(self: any, params: globals.Params, deferred: Promise.Resolver<Error>): globals.Params;
-    keyVCodeCharIDProcessor(self: any, params: globals.Params, deferred: Promise.Resolver<Error>): globals.Params;
+    keyVCodeCharIDProcessor(self: any, params: any, deferred: Promise.Resolver<Error>): globals.Params;
     stringifyRequestData: (data: any) => string;
     getDataFromArgs: (args: any) => any;
     getKeyFromArgs: (args: any) => globals.EveKey;

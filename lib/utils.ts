@@ -39,7 +39,7 @@ var utils = {
   /* 
   * A param processor for resources than require just the keyID, vCode, and CharacterID for authentication
   */
-  keyVCodeCharIDProcessor(self: any, params: globals.Params, deferred: Promise.Resolver<Error>): globals.Params{
+  keyVCodeCharIDProcessor(self: any, params: any, deferred: Promise.Resolver<Error>): globals.Params{
     var eveApiKey: globals.Params = utils.keyVCodeProcessor(self, params, deferred)
     if(params && params.characterID && typeof params === 'object') {
       if(eveApiKey) {
@@ -53,10 +53,8 @@ var utils = {
       return eveApiKey
     } 
     deferred.reject(
-        new error.EveInvalidRequestError(
-        {message: "Requires characterID property."}
+        new error.EveInvalidRequestError({message: "Requires characterID property."})
         )
-      )
     
   },
     

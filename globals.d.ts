@@ -66,5 +66,11 @@ export interface Params {
   vCode?: string;
   characterID?: (string | number);
   flat?: boolean;
-  eventIDs?: Array<string | number>;  
+  eventIDs?: Array<string | number>;
+  contractID?: (string | number);
+  orderID?: (string | number);
+  accountKey?: (string | number);
+  fromID?: (string | number);
+  rowCount?: (string | number);
+  version?: (string | number);
 }
