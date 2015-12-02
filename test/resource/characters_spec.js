@@ -15,16 +15,14 @@ describe('Characters', function () {
                     data: "keyID=" + testKey.keyID + "&vCode=" + testKey.vCode,
                     headers: {},
                 });
-                done()
-                eve = null;
+                done()                
             })
         });
 
         it('returns an Error', function (done) {
             var eve = testUtils.getSpyableEveApi();
-            eve.setApiKey({ 'keyID': '', 'vCode': '' })
             eve.characters.fetch({}, function (err, charIDs) {
-                expect(err.type).to.equal('EveInvalidRequestError')
+                expect(err.type).to.eql('EveInvalidRequestError')
                 done()
             })
         })
@@ -32,6 +30,7 @@ describe('Characters', function () {
     describe('#fetchP', function () {
         it('Sends the correct request with param object', function () {
             var eve = testUtils.getSpyableEveApi()
+            var e;
             eve.characters.fetchP(testKey).then(function (queue) {
                 expect(eve.LAST_REQUEST).to.deep.equal({
                     method: 'GET',
@@ -40,18 +39,21 @@ describe('Characters', function () {
                     headers: {},
                 })
             }).catch(function (err) {
-                expect(err).to.be.a('null')
+                e = err
             })
+            expect(e).to.be.undefined
         });
 
         it('returns an Error', function () {
             var eve = testUtils.getSpyableEveApi()
+            var c;
             eve.setApiKey({ 'keyID': '', 'vCode': '' })
-            eve.characters.fetchP({}).then(function (queue) {
-                expect(queue).to.be.a('null')
+            eve.characters.fetchP({}).then(function (chars) {
+                c = chars
             }).catch(function (err) {
-                expect(err.type).to.equal('EveInvalidRequestError')
+                expect(err.type).to.eql('EveInvalidRequestError')
             })
+            expect(c).to.be.undefined
         })
     })
 })  

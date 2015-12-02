@@ -8,67 +8,57 @@ export = utils
 var utils = {
 
   isKeyHash: function(o: any) {
-    return _.isPlainObject(o) && o.hasOwnProperty('keyID') && o.hasOwnProperty('vCode')
+    return _.isPlainObject(o) 
+        && (o.hasOwnProperty('keyID') || o.hasOwnProperty('keyid') || o.hasOwnProperty('keyId')) 
+        && (o.hasOwnProperty('vCode') || o.hasOwnProperty('vcode'))
   },
 
   isObject: function(o: any) {
     return _.isPlainObject(o);
   },
   
-  formatRequestParams(self: any, data: any, deferred: any) {
-    var requestParams = self.requestParamProcessor(data);      
-    if(requestParams instanceof Error) {
-      return deferred.reject(requestParams)
-    }
-    return requestParams
+  formatRequestParams(self: any, data: any, deferred: any): string {
+    var requestParams = self.requestParamProcessor(data, deferred);    
+    return utils.stringifyRequestData(requestParams)
   },
   
-  keyObjToStr(self: any, arg: any, deferred: any) {  
-    var params = {}
-    var eveApiKeyObj: globals.EveKey = self._eve.getApiKey(arg) 
-    if(this.isKeyHash(eveApiKeyObj)) {
-      return this.stringifyRequestData(eveApiKeyObj)
-    } else {
-      return deferred.reject(new error.EveInvalidRequestError("Missing keyID or vCode"))
-    }
-    
-  },
+      
+  // },
   
   /* 
   * A param processor for resources than require just the keyID and vCode for authentication
   */
-  keyVCodeProcessor(self: any, params: any, deferred: any): string{
-    var eveApiKey = this._eve.getApiKey(params)
-    if(utils.isKeyHash(eveApiKey)) {
-      return utils.stringifyRequestData(eveApiKey)
-    } else {			
-      return deferred.reject(
+  keyVCodeProcessor(self: any, params: globals.Params, deferred: any): globals.Params{
+    var eveApiKey: globals.EveKey = self._eve.getApiKey(params)
+    if(eveApiKey) {
+      return eveApiKey
+    } 
+    deferred.reject(
           new error.EveInvalidRequestError(
           {message: "Requires an object with a keyID and vCode property."}
           )
-        )
-    }
+        )    
   },
   
   /* 
   * A param processor for resources than require just the keyID, vCode, and CharacterID for authentication
   */
-  keyVCodeCharIDProcessor(self: any, params: any, deferred: any): string{
-    var eveApiKey = this._eve.getApiKey(params)
+  keyVCodeCharIDProcessor(self: any, params: globals.Params, deferred: any): globals.Params{
+    var eveApiKey: globals.Params = utils.keyVCodeProcessor(self, params, deferred)
     if(params && params.characterID && typeof params === 'object') {
       if(eveApiKey) {
         eveApiKey.characterID = params.characterID
       }
-      return utils.stringifyRequestData(eveApiKey)
+      return eveApiKey
     } else if ((typeof params === 'string' && params != '') || typeof params === 'number') {
       if(eveApiKey) {
         eveApiKey.characterID = params
       }
-      return utils.stringifyRequestData(eveApiKey)
+      return eveApiKey
     } 
-    return deferred.reject(
+    deferred.reject(
         new error.EveInvalidRequestError(
-        {message: "Requires a keyID, vCode and characterID property."}
+        {message: "Requires characterID property."}
         )
       )
     
@@ -79,7 +69,7 @@ var utils = {
    * Stringifies an Object, accommodating nested objects
    * (forming the conventional key 'parent[child]=value')
    */
-  stringifyRequestData: function(data: any) {
+  stringifyRequestData: function(data: any): string {
     return qs.stringify(data, {arrayFormat: 'brackets'});
   },
 

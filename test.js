@@ -1,4 +1,5 @@
-var eve = require('./lib/EveClient')
+var EveClient = require('./lib/EveClient')
+var eve = new EveClient()
 eve.setUserAgent('Testing EveApi-Node/0.0.1')
 // eve.setCache('file');
 var key = require('./test/testUtils').getUserEveKey()
@@ -22,21 +23,21 @@ eve.accountStatus.transformResponseData = function(resp){
 }
 
 var dataHandler = function dataHandler(data) {
-	console.log("test data: ", data)	
+	console.log("test data: ", data.result.key)	
 }
 var errorHandler = function(e){
 					console.log("error: ", e)
 				}
-var cb = function cb(err, data) {
+var callback = function cb(err, data) {
 	if(err) console.log("test err: ", err)
 	if(data) console.log("test data: ", data)
 	return
 }
 eve.setHost('api.testeveonline.com')
 eve.setApiKey(key)
-// eve.serverStatus.fetchP().then(dataHandler)
-// eve.characterID.fetch('Biae', cb)
-// eve.characters.fetchP({})
+// eve.serverStatus.fetch(callback)
+// eve.characterID.fetch('Biae', callback)
+// eve.characters.fetchP()
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
@@ -48,6 +49,6 @@ eve.setApiKey(key)
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
-eve.characterSheet.fetchP({characterID: config.TEST_CHARID})
+eve.apiKeyInfo.fetchP({characterID: config.TEST_CHARID})
 				.then(dataHandler)
 				.catch(errorHandler)

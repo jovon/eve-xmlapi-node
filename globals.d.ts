@@ -48,7 +48,6 @@ export interface Spec {
 export interface EveKey {
   keyID: string;
   vCode: string;
-  characterID?: string;
 }
 
 export interface ClientReq extends http.ClientRequest{
@@ -60,4 +59,11 @@ export interface Client {
   cache: any;
   setUserAgent: (ua: any)=>void;
   [key: string]: any;
+}
+
+export interface Params {
+  keyID?: string;
+  vCode?: string;
+  characterID?: any;
+  flat?: boolean;  
 }

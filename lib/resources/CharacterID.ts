@@ -11,18 +11,17 @@ class CharacterID extends Resource {
 			path: '/eve/CharacterID.xml.aspx',
 			cacheDuration: 3600000		
 		})
-		this.requestParamProcessor = function(params: any): any {
+		this.requestParamProcessor = function(params: any, deferred: any): any {
 			if(params && params.names && typeof params === 'object') {
 				if(Array.isArray(params.names)) {
-					return utils.stringifyRequestData({names: params.names.join(',')})
+					return {names: params.names.join(',')}
 				} else if(params.names && typeof params.names === 'string' && params.names != '') {
-					return utils.stringifyRequestData(params)
+					return params
 				}
 			} else if (typeof params === 'string' && params != '') {
-				return utils.stringifyRequestData({names: params})
-			} else {
-				return new Error.EveInvalidRequestError({message: "CharacterID requires an object with a names property or a string with the names separated by a comma."})
-			}
+				return {names: params}
+			} 
+			deferred.reject(new Error.EveInvalidRequestError({message: "CharacterID requires an object with a names property or a string with the names separated by a comma."}))	
 		};
 	};
 	

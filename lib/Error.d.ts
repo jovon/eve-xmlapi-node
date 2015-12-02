@@ -8,7 +8,6 @@ declare module _Error {
         param: any;
         detail: string;
         raw: any;
-        requestId: any;
         statusCode: any;
         constructor(raw?: any);
     }

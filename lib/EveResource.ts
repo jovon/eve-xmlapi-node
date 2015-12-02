@@ -10,6 +10,7 @@ var utils = require('./utils');
 import error = require('./Error');
 
 var hasOwn = {}.hasOwnProperty;
+var method = require('./EveMethod');
 
 /**
  * Encapsulates request logic for an Eve Resource
@@ -27,7 +28,7 @@ class EveResource {
     this.extend = utils.protoExtend;
 
     // Expose method-creator & prepared (basic) methods
-    this.method = require('./EveMethod');
+    this.method = method
     // this.initialize.apply(this, arguments);
     this.path = '';
     
@@ -38,10 +39,7 @@ class EveResource {
   }
   
  /* 
-  * Function to override the default data processor. This allows full control
-  * over how a EveResource's request data will get converted into an HTTP
-  * body. This is useful for non-standard HTTP requests. The function should
-  * take method name, data, and headers as arguments.
+  * Function to override the default query param processor.
   */
   requestParamProcessor: Function = null;
   

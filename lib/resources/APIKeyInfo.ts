@@ -2,16 +2,16 @@ import Resource = require('../EveResource');
 import utils = require('../utils')
 import Error = require('../Error')
 
-class Characters extends Resource {
+class APIKeyInfo extends Resource {
 	public fetch: ((err: Error, data: any)=>void);
 	constructor(eve: any) {
 		super(eve)
 		this.fetch = this.method({
 			method: 'GET',
-			path: '/account/Characters.xml.aspx',
-			cacheDuration: 3600000,
+			path: '/account/APIKeyInfo.xml.aspx',
+			cacheDuration: 300000,
 		})
 		this.authParamProcessor = utils.keyVCodeProcessor
 	}	
 }
-export = Characters
+export = APIKeyInfo

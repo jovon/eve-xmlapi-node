@@ -23,7 +23,8 @@ var resources: Resources = {
   Characters: require('./resources/Characters'),
   CharAccountBalance: require('./resources/CharAccountBalance'),
   AccountStatus: require('./resources/AccountStatus'),
-  CharacterSheet: require('./resources/CharacterSheet')
+  CharacterSheet: require('./resources/CharacterSheet'),
+  ApiKeyInfo: require('./resources/APIKeyInfo')
 }
 
 interface Resources {
@@ -115,17 +116,25 @@ class EveClient implements globals.Client{
     };
     
     // @param  {Object}   key   Eve Apikey with vCode and keyID properties
-    setApiKey(key: any) {
-      if (key) {
+    setApiKey(key: globals.EveKey): Error {
+      if (key && key.keyID && key.vCode) {
           this._setApiField('keyID', key.keyID);     
-          this._setApiField('vCode', key.vCode);      
+          this._setApiField('vCode', key.vCode);
+          return null
       }
+      return new Error("setApiKey Error: ApiKey needs a keyID and vCode property.")
     };
     
-    getApiKey(args: any): globals.EveKey {
-      var keyid = this.getApiField('keyID') || args.keyID || args.keyid,
-          vcode = this.getApiField('vCode') || args.vCode || args.vcode
-      
+    getApiKey(args?: any): globals.EveKey {
+      var keyid: string, vcode: string;
+      if (utils.isKeyHash(args)) {
+        keyid = args.keyID || args.keyid || args.keyId
+        vcode = args.vCode || args.vcode
+      } 
+      if(!keyid || !vcode) {
+        keyid = this.getApiField('keyID')
+        vcode = this.getApiField('vCode')
+      }
       if(keyid && keyid != '' && vcode && vcode != '') {
         return {keyID: keyid, vCode: vcode}
       }
@@ -174,4 +183,4 @@ class EveClient implements globals.Client{
   
   };
 
-module.exports = new EveClient();
+export = EveClient;

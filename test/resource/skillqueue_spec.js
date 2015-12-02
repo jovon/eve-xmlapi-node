@@ -28,9 +28,10 @@ describe('Skill Queue', function () {
             })
         })
     })
-    describe('#fetchP', function () {
+    describe('#fetchP', function () {        
         it('Sends the correct request with param object', function () {
             var eve = testUtils.getSpyableEveApi()
+            var e;
             eve.skillQueue.fetchP(testParams).then(function (queue) {
                 expect(eve.LAST_REQUEST).to.deep.equal({
                     method: 'GET',
@@ -39,18 +40,21 @@ describe('Skill Queue', function () {
                     headers: {},
                 })
             }).catch(function (err) {
-                expect(err).to.be.a('null')
+                e = err
             })
+            expect(e).to.be.undefined
         });
 
         it('returns an Error', function () {
             var eve = testUtils.getSpyableEveApi()
             eve.setApiKey({ 'keyID': '', 'vCode': '' })
+            var q;
             eve.skillQueue.fetchP({}).then(function (queue) {
-                expect(queue).to.be.a('null')
+                q = queue
             }).catch(function (err) {
                 expect(err.type).to.equal('EveInvalidRequestError')
             })
+            expect(q).to.be.undefined            
         })
     })
 })  

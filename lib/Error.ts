@@ -14,7 +14,6 @@ module _Error {
     param: any;
     detail: string;
     raw: any;
-    requestId: any;
     statusCode: any;
     constructor(raw?: any) {  
       super()
@@ -27,7 +26,6 @@ module _Error {
       this.message = raw.message || 'Unknown';
       this.detail = raw.detail;
       this.raw = raw;
-      this.requestId = raw.requestId;
       this.statusCode = raw.statusCode;      
     }    
   };  

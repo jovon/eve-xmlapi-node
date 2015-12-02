@@ -3,7 +3,7 @@ import _ = require('lodash');
 import path = require('path');
 import globals = require('../globals')
 
-var utils = require('./utils');
+import utils = require('./utils');
 var Error = require('./Error')
 
 
@@ -33,17 +33,15 @@ function eveMethod(spec: globals.Spec) {
         options = {},
         requestPath: string = '',
         cacheKey: string = '',
-        requestParams = '',
+        requestParams: string = '',
         auth: string = '';
         
     if(self.authParamProcessor) {
-      auth = self.authParamProcessor(self, args[0], deferred)      
+      auth = utils.stringifyRequestData(self.authParamProcessor(self, args[0], deferred))      
     }
     
     if (self.requestParamProcessor) {
-      requestParams = utils.formatRequestParams(self, 
-                                                args[0], 
-                                                deferred);
+      requestParams = utils.stringifyRequestData(self.requestParamProcessor(args[0], deferred));
     }
     var apiVersion = self._eve.getApiField('version') || '';    
   
