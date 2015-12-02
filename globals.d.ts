@@ -64,6 +64,7 @@ export interface Client {
 export interface Params {
   keyID?: string;
   vCode?: string;
-  characterID?: any;
-  flat?: boolean;  
+  characterID?: (string | number);
+  flat?: boolean;
+  eventIDs?: Array<string | number>;  
 }

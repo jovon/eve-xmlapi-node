@@ -100,6 +100,7 @@ class EveResource {
       });
       res.on('end', function() {
         var headers = res.headers || {};
+        
         parseString(response, function(err: Error, result: any){
           if (err) return callback.call(self, new Error("Error parsing"))
           

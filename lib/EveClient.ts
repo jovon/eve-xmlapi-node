@@ -24,7 +24,11 @@ var resources: Resources = {
   CharAccountBalance: require('./resources/CharAccountBalance'),
   AccountStatus: require('./resources/AccountStatus'),
   CharacterSheet: require('./resources/CharacterSheet'),
-  ApiKeyInfo: require('./resources/APIKeyInfo')
+  ApiKeyInfo: require('./resources/APIKeyInfo'),
+  CharAssetList: require('./resources/CharAssetList'),
+  Blueprints: require('./resources/Blueprints'),
+  CharBookmarks: require('./resources/CharBookmarks'),
+  UpcomingCalendarEvents: require('./resources/UpcomingCalendarEvents')
 }
 
 interface Resources {

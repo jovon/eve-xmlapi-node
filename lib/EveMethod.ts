@@ -54,9 +54,9 @@ function eveMethod(spec: globals.Spec) {
       'X-Client-User-Agent': 'EveAPI-node/' + self._eve.PACKAGE_VERSION + ' (jvnpackard@gmail.com)'
     };
     
-    requestPath = this.createFullPath(commandPath, requestParams, auth)
+    requestPath = this.createFullPath(commandPath, requestParams)
     
-    cacheKey = (this.overrideHost || this._eve.getApiField('host')) + requestPath
+    cacheKey = (this.overrideHost || this._eve.getApiField('host')) + requestPath + auth
     
     function requestCallback(err: Error, response: any, isCached: boolean) {
       var resp: string, res: string;

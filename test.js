@@ -23,7 +23,7 @@ eve.accountStatus.transformResponseData = function(resp){
 }
 
 var dataHandler = function dataHandler(data) {
-	console.log("test data: ", data.result.key)	
+	console.log("test data: ", data.result)	
 }
 var errorHandler = function(e){
 					console.log("error: ", e)
@@ -49,6 +49,8 @@ eve.setApiKey(key)
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
-eve.apiKeyInfo.fetchP({characterID: config.TEST_CHARID})
-				.then(dataHandler)
+eve.upcomingCalendarEvents.fetchP({characterID: config.TEST_CHARID})
+				.then(function dataHandler(data) {
+					console.log("test data: ", data.result.rowset[0])	
+				})
 				.catch(errorHandler)
