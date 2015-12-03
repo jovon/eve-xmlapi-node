@@ -23,7 +23,7 @@ eve.accountStatus.transformResponseData = function(resp){
 }
 
 var dataHandler = function dataHandler(data) {
-	console.log("test data: ", data.result)	
+	console.log("test data: ", data.result.rowset[0].row)	
 }
 var errorHandler = function(e){
 					console.log("error: ", e)
@@ -34,16 +34,16 @@ var callback = function cb(err, data) {
 	return
 }
 eve.setHost('api.testeveonline.com')
-// eve.setApiKey(key)
+eve.setApiKey(key)
 // eve.serverStatus.fetch(callback)
 // eve.characterID.fetch('Edward deBristol', callback)
 // eve.characters.fetchP()
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
-// eve.skillQueue.fetchP({characterID: config.TEST_CHARID})
-// 				.then(dataHandler)
-// 				.catch(errorHandler)
+eve.skillQueue.fetchP({characterID: config.TEST_CHARID})
+				.then(dataHandler)
+				.catch(errorHandler)
 
 // eve.charAccountBalance.fetchP({characterID: config.TEST_CHARID})
 // 				.then(dataHandler)
@@ -53,4 +53,4 @@ eve.setHost('api.testeveonline.com')
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
-eve.sovereignty.fetch(callback)
+// eve.sovereignty.fetch(callback)

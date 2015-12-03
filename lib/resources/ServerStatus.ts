@@ -8,8 +8,7 @@ class ServerStatus extends Resource {
 			method: 'GET',
 			path: '/server/ServerStatus.xml.aspx',
 			cacheDuration: 180000,
-		})
-		
+		})		
 	}
 }
 
