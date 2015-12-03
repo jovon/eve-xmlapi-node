@@ -1,7 +1,7 @@
 import Resource = require('../EveResource');
 import Error = require('../Error')
 import utils = require('../utils')
-import globals = require('../../globals')
+import globals = require('../globals')
 
 class TypeName extends Resource {
 	public fetch: ((err: Error, data: any)=>void);
@@ -22,7 +22,10 @@ class TypeName extends Resource {
 			} else if (typeof params === 'string' && params != '') {
 				return {names: params}
 			} 
-			deferred.reject(new Error.EveInvalidRequestError({message: "TypeName requires an object with an ids property or a string with the ids separated by a comma."}))	
+			deferred.reject(
+				new Error.EveInvalidRequestError(
+						{message: "TypeName requires an object with an ids property or a string with the ids separated by a comma."}
+					))	
 		};
 	}
 }

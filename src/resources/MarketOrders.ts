@@ -1,7 +1,7 @@
 import Resource = require('../EveResource');
 import utils = require('../utils')
 import Error = require('../Error')
-import globals = require('../../globals')
+import globals = require('../globals')
 import _ = require('lodash')
 
 class MarketOrders extends Resource {

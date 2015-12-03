@@ -1,7 +1,7 @@
 import Resource = require('../EveResource');
 import Error = require('../Error')
 import utils = require('../utils')
-import globals = require('../../globals')
+import globals = require('../globals')
 
 class CharacterName extends Resource {
 	public fetch: ((err: Error, data: any)=>void);

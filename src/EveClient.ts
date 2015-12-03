@@ -1,5 +1,5 @@
 import utils = require('./utils')
-import globals = require('../globals')
+import globals = require('./globals')
 import Promise = require('bluebird')
 import Cache = require('./cache/cache')
 import MemoryCache = require('./cache/memory')

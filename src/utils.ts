@@ -1,6 +1,6 @@
 import qs = require('qs');
 import _ = require('lodash');
-import globals = require('../globals')
+import globals = require('./globals')
 import Promise = require('bluebird')
 import error = require('./Error')
 var hasOwn = {}.hasOwnProperty;

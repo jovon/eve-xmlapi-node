@@ -1,16 +1,16 @@
 import Resource = require('../EveResource');
 import utils = require('../utils')
 import Error = require('../Error')
-import globals = require('../../globals')
+import globals = require('../globals')
 import _ = require('lodash')
 
-class CorpWalletJournal extends Resource {
+class CharWalletJournal extends Resource {
 	public fetch: ((err: Error, data: any)=>void);
 	constructor(eve: any) {
 		super(eve)
 		this.fetch = this.method({
 			method: 'GET',
-			path: '/corp/WalletJournal.xml.aspx',
+			path: '/char/WalletJournal.xml.aspx',
 			cacheDuration: 1800000,
 		})
 		this.authParamProcessor = utils.keyVCodeCharIDProcessor
@@ -29,4 +29,4 @@ class CorpWalletJournal extends Resource {
 		}
 	}	
 }
-export = CorpWalletJournal
+export = CharWalletJournal

@@ -3,7 +3,7 @@ import https = require('https');
 import path = require('path');
 import Promise = require('bluebird');
 import _ = require('lodash');
-import globals = require('../globals')
+import globals = require('./globals')
 var parseString = require('xml2js').parseString;
 
 var utils = require('./utils');

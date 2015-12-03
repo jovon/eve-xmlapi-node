@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "library for accessing Eve Online's API for Node.js",
   "private": true,
-  "main": "lib/EveClient.ts",
-  "typings": "lib/EveClient",
+  "main": "lib/EveClient.js",
+  "typings": "lib/globals",
   "files": [
     "lib/"
   ],
