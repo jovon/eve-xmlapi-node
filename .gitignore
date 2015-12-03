@@ -8,4 +8,5 @@ test/config.js
 dump.rdb
 lib/
 .vscode/
-.tscache
+.tscache/
+typings/
