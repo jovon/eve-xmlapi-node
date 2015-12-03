@@ -73,4 +73,6 @@ export interface Params {
   fromID?: (string | number);
   rowCount?: (string | number);
   version?: (string | number);
+  ids?: any;
+  names?: any;
 }

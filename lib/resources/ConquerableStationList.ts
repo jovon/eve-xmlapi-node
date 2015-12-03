@@ -1,15 +1,14 @@
 import Resource = require('../EveResource');
 
-class CallList extends Resource {
+class ConquerableStationList extends Resource {
 	public fetch: ((err: Error, data: any)=>void);
 	constructor(eve: any) {
 		super(eve)
 		this.fetch = this.method({
 			method: 'GET',
-			path: '/Api/CallList.xml.aspx',
-			cacheDuration: 21600000,
+			path: '/eve/ConquerableStationList.xml.aspx',
 		})
 	}
 }
 
-export = CallList
+export = ConquerableStationList

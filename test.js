@@ -30,13 +30,13 @@ var errorHandler = function(e){
 				}
 var callback = function cb(err, data) {
 	if(err) console.log("test err: ", err)
-	if(data) console.log("test data: ", data)
+	if(data) console.log("test data: ", data.result.rowset[0].row)
 	return
 }
 eve.setHost('api.testeveonline.com')
-eve.setApiKey(key)
+// eve.setApiKey(key)
 // eve.serverStatus.fetch(callback)
-// eve.characterID.fetch('Biae', callback)
+// eve.characterID.fetch('Edward deBristol', callback)
 // eve.characters.fetchP()
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
@@ -49,6 +49,8 @@ eve.setApiKey(key)
 // 				.then(dataHandler)
 // 				.catch(errorHandler)
 
-eve.allianceList.fetchP({version: 1})//{characterID: config.TEST_CHARID})
-				.then(dataHandler)
-				.catch(errorHandler)
+// eve.allianceList.fetchP({version: 1})//{characterID: config.TEST_CHARID})
+// 				.then(dataHandler)
+// 				.catch(errorHandler)
+
+eve.sovereignty.fetch(callback)

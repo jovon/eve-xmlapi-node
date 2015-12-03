@@ -46,7 +46,20 @@ var resources: Resources = {
   CharWalletTransactions: require('./resources/CharWalletTransactions'),
   CorpWalletJournal: require('./resources/CorpWalletJournal'),
   CorpWalletTransactions: require('./resources/CorpWalletTransactions'),
-  AllianceList: require('./resources/AllianceList')
+  AllianceList: require('./resources/AllianceList'),
+  CharacterAffiliation: require('./resources/CharacterAffiliation'),
+  CharacterInfo: require('./resources/CharacterInfo'),
+  CharacterName: require('./resources/CharacterName'),
+  ConquerableStationList: require('./resources/ConquerableStationList'),
+  ErrorList: require('./resources/ErrorList'),
+  RefTypes: require('./resources/RefTypes'),
+  TypeName: require('./resources/TypeName'),
+  
+  // Map Resources
+  FacWarSystems: require('./resources/FacWarSystems'),
+  Jumps: require('./resources/Jumps'),
+  Kills: require('./resources/Kills'),
+  Sovereignty: require('./resources/Sovereignty')
 }
 
 interface Resources {
