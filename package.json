@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "description": "library for accessing Eve Online's API for Node.js",
   "private": true,
-  "main": "index.js",
+  "main": "lib/EveClient.ts",
+  "typings": "lib/EveClient",
+  "files": [
+    "lib/"
+  ],
   "directories": {
     "test": "test"
   },
@@ -22,7 +26,8 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",
     "fakeredis": "^0.3.4",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "typescript": "^1.7.3"
   },
   "scripts": {
     "test": "mocha -u qunit --recursive"

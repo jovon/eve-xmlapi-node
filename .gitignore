@@ -9,6 +9,7 @@ dump.rdb
 .vscode
 *.js.map
 *.js
+*.d.ts
 typings
 output
 .vscode

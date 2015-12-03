@@ -6,7 +6,7 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "16134c168d021351acb1673ee9659644fc58c424"
+      "commit": "78d36dd49b6b55b9fdfe61776a12bf05c8b07777"
     },
     "bluebird/bluebird.d.ts": {
       "commit": "16134c168d021351acb1673ee9659644fc58c424"
@@ -16,6 +16,15 @@
     },
     "mocha/mocha.d.ts": {
       "commit": "16134c168d021351acb1673ee9659644fc58c424"
+    },
+    "qs/qs.d.ts": {
+      "commit": "78d36dd49b6b55b9fdfe61776a12bf05c8b07777"
+    },
+    "redis/redis.d.ts": {
+      "commit": "78d36dd49b6b55b9fdfe61776a12bf05c8b07777"
+    },
+    "xml2js/xml2js.d.ts": {
+      "commit": "78d36dd49b6b55b9fdfe61776a12bf05c8b07777"
     }
   }
 }
