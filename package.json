@@ -1,7 +1,7 @@
 {
-  "name": "eveapi-node",
+  "name": "eve-xmlapi",
   "version": "0.0.1",
-  "description": "library for accessing Eve Online's API for Node.js",
+  "description": "Node.js library for accessing Eve Online's XML API",
   "private": true,
   "main": "lib/EveClient.js",
   "typings": "lib/globals",
@@ -33,5 +33,5 @@
     "test": "mocha -u qunit --recursive"
   },
   "author": "Jovon Packard",
-  "license": "ISC"
+  "license": "MIT"
 }
