@@ -2,7 +2,6 @@
   "name": "eve-xmlapi",
   "version": "0.0.1",
   "description": "Node.js library for accessing Eve Online's XML API",
-  "private": true,
   "main": "lib/EveClient.js",
   "typings": "lib/globals",
   "files": [

@@ -16,6 +16,7 @@ var DEFAULT_HOST = 'api.eveonline.com',
 	DEFAULT_TIMEOUT = require('http').createServer().timeout;
 
 var resources: Resources = {
+	
 	CallList: require('./resources/CallList'),
 	SkillQueue: require('./resources/SkillQueue'),
 	CharacterID: require('./resources/CharacterID'),

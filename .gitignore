@@ -4,9 +4,8 @@
 *.swp
 node_modules
 test/config.js
-test.js
+./test.js
 dump.rdb
-.vscode
-lib
-.vscode
+lib/
+.vscode/
 .tscache
