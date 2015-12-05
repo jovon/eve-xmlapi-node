@@ -71,23 +71,28 @@
 	eve.contracts.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback) //contractID is optional	
 	eve.facWarStats.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
 	eve.mailingLists.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.mailMessages.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.marketOrders.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback) // characterID and orderID optional
+	eve.mailMessages.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)		
+	eve.marketOrders.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback) // characterID and orderID optional
 	eve.skillQueue.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
 	eve.upcomingCalendarEvents.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)	
 	
 	// char resources with matching corp resources that start with char
 	eve.charAccountBalance.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
 	eve.charAssetList.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.charBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.charWalletJournal.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)// accountKey, fromID and rowCount are optional
-	eve.charWalletTransactions.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)// accountKey, fromID and rowCount are optional
+	eve.charBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)		
+	eve.charWalletJournal.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)// accountKey, fromID and rowCount are optional		
+	eve.charWalletTransactions.fetch({keyID: '1234', vCode: '12345', characterID: '123'},
+		callback)// accountKey, fromID and rowCount are optional
 	
 	// corp resources
 	eve.corpAccountBalance.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
 	eve.corpBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.corpWalletJournal.fetch({keyID: '1234', vCode: '12345', characterID: '123', accountKey: '1002'}, callback)// fromID and rowCount are optional
-	eve.corpWalletTransactions.fetch({keyID: '1234', vCode: '12345', characterID: '123', accountKey:'1001'}, callback)// fromID and rowCount are optional
+	eve.corpWalletJournal.fetch({keyID: '1234', vCode: '12345', characterID: '123', accountKey: '1002'},
+		callback)// fromID and rowCount are optional
+	eve.corpWalletTransactions.fetch({keyID: '1234', vCode: '12345', characterID: '123', accountKey:'1001'}, 
+		callback)// fromID and rowCount are optional
 	
 	eve.allianceList.fetch(callback)
 	eve.conquerableStationList.fetch(callback)
