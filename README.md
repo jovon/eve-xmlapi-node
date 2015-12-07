@@ -1,17 +1,20 @@
 # Eve-XMLAPI-Node
+
 	A Node.js package for fetching data from Eve Online's XML API.
 
 ##	Installing
+
 	npm install eve-xmlapi
 	
 ##	Usage
+
 	var Eve = require('eve-xmlapi');
 	var eve = Eve()
 	
 	// Set your own User-Agent
 	eve.setUserAgent('eve-xmlapi-node/0.0.1 (git://github.com/jovon/eve-xmlapi-node.git)')
 	
-	eve.setHost('api.testeveonline.com')
+	eve.setHost('api.testeveonline.com')// Default: 'api.eveonline.com'
 	eve.setApiKey({keyID: '', vCode: ''})
 	
 	// With a callback
@@ -28,12 +31,15 @@
 	
 	// Set a cache: file, redis, or memory by default.	
 	// 'prefix' will be added to the beginning of each file.
-	eve.setCache('file', {path: '/tmp', prefix: ''}) //These are default options and unnecessary
+	eve.setCache('file', {path: '/tmp', prefix: ''}) 
+	//These 'path' and 'prefix' settings are default options and unnecessary.
+	
 		OR		
-	eve.setCache('redis', {port: 6379, host: '127.0.0.1'})  //These are default options and unnecessary
+	eve.setCache('redis', {port: 6379, host: '127.0.0.1'})  
+	//These 'port' and 'host' settings are default options and unnecessary
 	
 	
-	// If you don't like the format of the return JSON	
+	// If you don't like the format of the return JSON...	
 	//  Change all JSON responses
 	eve.transformAllResponses = function(resp){
 		var results = {};
@@ -51,47 +57,73 @@
 		return resp
 	}
 
-	// Important to note if you've used 'setApiKey', putting the keyID and vCode into the parameters will override it.
+	// Important to note if you've used 'setApiKey', putting the keyID 
+	// and vCode into the parameters will override it.
 	eve.accountStatus.fetch({keyID: '123', vCode: '12345'}, callback)
 	eve.apiKeyInfo.fetch({keyID: '123', vCode: '12345'}, callback)
-	eve.blueprints.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.calendarEventAttendees.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)		
+	eve.blueprints.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)
+	eve.calendarEventAttendees.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)		
 	eve.callList.fetch({keyID: '123', vCode: '12345'}, callback)
 	eve.characterAffiliation.fetch({ids: ['123', '321']}, callback)
-	eve.characterInfo.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
+	eve.characterInfo.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)
 	eve.characterName.fetch({ids: ['123', '321']}, callback)
 	eve.characterID.fetch({names: ['CCP FoxFour', 'CCP Tellus']}, callback)	
 	eve.characters.fetch({keyID: '123', vCode: '12345'}, callback)	
-	eve.characterSheet.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)	
-	eve.chatChannels.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.contactList.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.contactNotifications.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.contractBids.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.contractItems.fetch({keyID: '1234', vCode: '12345', characterID: '123', contractID: '123'}, callback)
-	eve.contracts.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback) //contractID is optional	
-	eve.facWarStats.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.mailingLists.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.mailMessages.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)		
+	eve.characterSheet.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)	
+	eve.chatChannels.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)
+	eve.contactList.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)
+	eve.contactNotifications.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)
+	eve.contractBids.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)
+	eve.contractItems.fetch({keyID: '1234', vCode: '12345', characterID: '123', 
+		contractID: '123'}, callback)
+	eve.contracts.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback) //contractID is optional	
+	eve.facWarStats.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)
+	eve.mailingLists.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)
+	eve.mailMessages.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)		
 	eve.marketOrders.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
 		callback) // characterID and orderID optional
-	eve.skillQueue.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.upcomingCalendarEvents.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)	
+	eve.skillQueue.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)
+	eve.upcomingCalendarEvents.fetch({keyID: '1234', vCode: '12345',
+		characterID: '123'}, callback)	
 	
 	// char resources with matching corp resources that start with char
-	eve.charAccountBalance.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.charAssetList.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.charBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)		
-	eve.charWalletJournal.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+	eve.charAccountBalance.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, 
+		callback)
+	eve.charAssetList.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)
+	eve.charBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, 
+		callback)		
+	eve.charWalletJournal.fetch({keyID: '1234', vCode: '12345',
+		characterID: '123'}, 
 		callback)// accountKey, fromID and rowCount are optional		
-	eve.charWalletTransactions.fetch({keyID: '1234', vCode: '12345', characterID: '123'},
+	eve.charWalletTransactions.fetch({keyID: '1234', vCode: '12345',
+		characterID: '123'},
 		callback)// accountKey, fromID and rowCount are optional
 	
 	// corp resources
-	eve.corpAccountBalance.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.corpBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'}, callback)
-	eve.corpWalletJournal.fetch({keyID: '1234', vCode: '12345', characterID: '123', accountKey: '1002'},
+	eve.corpAccountBalance.fetch({keyID: '1234', vCode: '12345', 
+		characterID: '123'}, callback)
+	eve.corpBookmarks.fetch({keyID: '1234', vCode: '12345', characterID: '123'},
+		callback)
+	eve.corpWalletJournal.fetch({keyID: '1234', vCode: '12345',
+		characterID: '123', accountKey: '1002'},
 		callback)// fromID and rowCount are optional
-	eve.corpWalletTransactions.fetch({keyID: '1234', vCode: '12345', characterID: '123', accountKey:'1001'}, 
+	eve.corpWalletTransactions.fetch({keyID: '1234', vCode: '12345',
+		characterID: '123', accountKey:'1001'},
 		callback)// fromID and rowCount are optional
 	
 	eve.allianceList.fetch(callback)
@@ -106,6 +138,7 @@
 	eve.serverStatus.fetch(callback)
 
 ##	Development
+
 	git clone https://github.com/jovon/eve-xmlapi-node.git
 	
 	cd eve-xmlapi-node
