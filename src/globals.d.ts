@@ -56,7 +56,7 @@ declare module globals {
 		vCode?: string;
 		characterID?: (string | number);
 		flat?: boolean;
-		eventIDs?: Array<string | number>;
+		eventIDs?: (string | number)[];
 		contractID?: (string | number);
 		orderID?: (string | number);
 		accountKey?: (string | number);
