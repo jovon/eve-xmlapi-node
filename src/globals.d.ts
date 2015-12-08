@@ -1,4 +1,3 @@
-import http = require('http')
 
 declare module globals {
 	export interface Options {
@@ -13,7 +12,7 @@ declare module globals {
 		path?: string;
 		headers?: Headers;
 		auth?: string;
-		agent?: http.Agent;
+		agent?: any;
 	}
 
 	export interface Headers {
@@ -51,10 +50,7 @@ declare module globals {
 		vCode: string;
 	}
 
-	export interface ClientReq extends http.ClientRequest {
-		_isAborted?: boolean;
-	}
-	
+		
 	export interface Params {
 		keyID?: string;
 		vCode?: string;

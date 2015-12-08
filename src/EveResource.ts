@@ -66,7 +66,7 @@ class EveResource {
 		return deferred;
 	};
 
-	_timeoutHandler(timeout: number, req: globals.ClientReq, callback: Function) {
+	_timeoutHandler(timeout: number, req: any, callback: Function) {
 		var self = this;
 		return function() {
 			var timeoutErr = new Error('ETIMEDOUT');
@@ -85,7 +85,7 @@ class EveResource {
 		}
 	};
 
-	_responseHandler(req: globals.ClientReq, callback: Function) {
+	_responseHandler(req: any, callback: Function) {
 		var self = this;
 
 		return function(res: http.ClientResponse) {
@@ -119,7 +119,7 @@ class EveResource {
 		};
 	};
 
-	_errorHandler(req: globals.ClientReq, callback: Function) {
+	_errorHandler(req: any, callback: Function) {
 		var self = this;
 		return function(err: Error) {
 			if (req._isAborted) {
