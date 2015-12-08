@@ -1,6 +1,6 @@
 import http = require('http')
 
-module globals {
+declare module globals {
 	export interface Options {
 		protocol?: string;
 		host?: string;
@@ -59,6 +59,8 @@ module globals {
 		_api: Api;
 		cache: any;
 		setUserAgent: (ua: any) => void;
+		serverStatus?: (cb?: Function)=>void;
+		transformAllResponses?: (cb: (resp: any)=>any)=>void;
 		[key: string]: any;
 	}
 
