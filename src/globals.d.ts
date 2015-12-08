@@ -54,16 +54,7 @@ declare module globals {
 	export interface ClientReq extends http.ClientRequest {
 		_isAborted?: boolean;
 	}
-
-	export interface Client {
-		_api: Api;
-		cache: any;
-		setUserAgent: (ua: any) => void;
-		serverStatus?: (cb?: Function)=>void;
-		transformAllResponses?: (cb: (resp: any)=>any)=>void;
-		[key: string]: any;
-	}
-
+	
 	export interface Params {
 		keyID?: string;
 		vCode?: string;

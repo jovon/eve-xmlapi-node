@@ -67,7 +67,7 @@ interface Resources {
 	[key: string]: any
 }
 
-class EveClient implements globals.Client {
+class EveClient{
 	_api: globals.Api;
 	EveResource: any;
 	cache: any;
@@ -75,10 +75,7 @@ class EveClient implements globals.Client {
 	private _cache: any;
 	private USER_AGENT: any;
 	[key: string]: any;
-	constructor() {
-		if (!(this instanceof EveClient)) {
-			return new EveClient();
-		}
+	constructor() {	
 
 		this._api = {
 			auth: null,
