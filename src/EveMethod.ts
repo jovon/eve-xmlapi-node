@@ -24,24 +24,22 @@ function eveMethod(spec: globals.Spec) {
 		duration = spec.cacheDuration || 3600000,  // sets default duration at 1 hour
 		securedResource = spec.secured;
 
-	return function() {
+	return (args?: any, callback?: (err: Error, data: any)=>any)=> {
 		var self = this,
-			args = [].slice.call(arguments),
 			cache = self._eve.getCache(),
-			callback = typeof args[args.length - 1] == 'function' && args.pop(),
-			deferred = this.createDeferred(callback),
+			deferred = this.createDeferred(args, callback),
 			options = {},
 			requestPath: string = '',
 			cacheKey: string = '',
 			requestParams: string = '',
 			auth: string = '';
-
+			
 		if (self.authParamProcessor) {
-			auth = utils.stringifyRequestData(self.authParamProcessor(self, args[0], deferred))
+			auth = utils.stringifyRequestData(self.authParamProcessor(self, args, deferred))
 		}
 
 		if (self.requestParamProcessor) {
-			requestParams = utils.stringifyRequestData(self.requestParamProcessor(args[0], deferred));
+			requestParams = utils.stringifyRequestData(self.requestParamProcessor(args, deferred));
 		}
 		var apiVersion = self._eve.getApiField('version') || '';
 

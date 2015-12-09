@@ -50,20 +50,29 @@ class EveResource {
 		return requestPath
 	};
 
-	createDeferred(callback: Function) {
-		var deferred = Promise.defer();
-
-		if (callback) {
-			// Callback, if provided, is simply translated to Promise'esque:
-			// (Ensure callback is called outside of promise stack)
-			deferred.promise.then(function(res) {
-				setTimeout(function() { callback(null, res) }, 0);
-			}, function(err) {
-				setTimeout(function() { callback(err, null); }, 0);
-			});
+	createDeferred(args: any, cb: Function) {
+		var func: Function
+		if(typeof args === 'function') {
+			func = args
+		} else if (cb) {
+			func = cb
 		}
-
-		return deferred;
+		
+		function convertToPromise(callback: Function) {
+			var deferred = Promise.defer();
+			if(callback) {
+				// Callback, if provided, is simply translated to Promise'esque:
+				// (Ensure callback is called outside of promise stack)
+				deferred.promise.then(function(res) {
+					setTimeout(function() { callback(null, res) }, 0);
+				}, function(err) {
+					setTimeout(function() { callback(err, null); }, 0);
+				});
+			}
+			return deferred;
+		}
+		return convertToPromise(func)
+		
 	};
 
 	_timeoutHandler(timeout: number, req: any, callback: Function) {
@@ -153,7 +162,7 @@ class EveResource {
 
 		var isInsecureConnection = self._eve.getApiField('protocol') === 'http',
 			req = (isInsecureConnection ? http : https).request(opt);
-
+		
 		req.setTimeout(timeout, self._timeoutHandler(timeout, req, callback));
 		req.on('response', self._responseHandler(req, callback));
 		req.on('error', self._errorHandler(req, callback));
