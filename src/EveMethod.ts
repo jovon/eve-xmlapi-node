@@ -4,7 +4,7 @@ import path = require('path');
 import globals = require('./globals')
 
 import utils = require('./utils');
-var Error = require('./Error')
+import Error = require('./Error')
 
 
 /**
