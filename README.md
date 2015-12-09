@@ -9,7 +9,7 @@
 ##	Usage
 
 	var Eve = require('eve-xmlapi');
-	var eve = Eve()
+	var eve = new Eve()
 	
 	// Set your own User-Agent
 	eve.setUserAgent('eve-xmlapi-node/0.0.1 (git://github.com/jovon/eve-xmlapi-node.git)')
