@@ -139,9 +139,9 @@
 
 ##	Development
 
-	git clone https://github.com/jovon/eve-xmlapi-node.git
+	git clone https://github.com/jovon/eve-xmlapi-ts.git
 	
-	cd eve-xmlapi-node
+	cd eve-xmlapi-ts
 	
 	npm install
 	
