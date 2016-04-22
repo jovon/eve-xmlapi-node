@@ -1,4 +1,4 @@
-# Eve-XMLAPI-Node
+# Eve-XMLAPI-TS
 
 	A Node.js package for fetching data from Eve Online's XML API.
 
