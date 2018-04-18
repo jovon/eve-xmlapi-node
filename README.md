@@ -42,7 +42,7 @@
 	// If you don't like the format of the return JSON...	
 	//  Change all JSON responses
 	eve.transformAllResponses = function(resp){
-		var results = {};
+		var results = {}
 		results.eveapi = resp.eveapi.$
 		results.cachedUntil = resp.eveapi.cachedUntil[0]
 		results.currentTime = resp.eveapi.currentTime[0]
